@@ -1,0 +1,3095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Autopilot - Agentic AI Platform for MSP Automation</title>
+  <meta name="description" content="AI Autopilot is an Agentic AI platform built by MSPs for MSPs. Automate ticket triage, documentation, and IT operations with intelligent AI agents.">
+  <meta name="theme-color" content="#1e40af">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="preload" href="favicon.png" as="image">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://aiautopilot.ai">
+  <link rel="dns-prefetch" href="https://www.google.com">
+  <link rel="dns-prefetch" href="https://i.pravatar.cc">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></noscript>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'jakarta': ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            'serif-accent': ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            'page': '#fafafa',
+            'container': '#f2f2f2',
+            'card': 'rgba(0,0,0,0.02)',
+            'primary-fg': 'rgba(0,0,0,0.9)',
+            'secondary-fg': 'rgba(0,0,0,0.55)',
+            'tertiary-fg': 'rgba(0,0,0,0.4)',
+            'border-default': 'rgba(0,0,0,0.07)',
+            'border-subtle': 'rgba(0,0,0,0.04)',
+            'border-strong': 'rgba(0,0,0,0.15)',
+            'brand': '#1e40af',
+            'brand-dark': '#1e3a8a',
+            'brand-hover': '#1d4ed8',
+            'brand-accent': '#dc2626',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizelegibility;
+      letter-spacing: -0.011em;
+    }
+    body.page-loading {
+      overflow: hidden;
+    }
+    body.page-loading > *:not(.page-reveal-overlay) {
+      filter: blur(18px) saturate(1.2);
+      opacity: 0;
+      transform: scale(1.02) translateZ(0);
+      will-change: filter, opacity, transform;
+    }
+    body.page-revealed > *:not(.page-reveal-overlay) {
+      filter: blur(0px) saturate(1);
+      opacity: 1;
+      transform: scale(1) translateZ(0);
+      transition: filter 0.9s cubic-bezier(0.16,1,0.3,1),
+                  opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cv-auto {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 600px;
+    }
+    .page-reveal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      background: rgba(250,250,250,0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      will-change: opacity;
+      transform: translateZ(0);
+    }
+    .page-reveal-overlay.fade-out {
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .page-stagger {
+      opacity: 0;
+      transform: translateY(30px) translateZ(0);
+      filter: blur(6px);
+      will-change: opacity, transform, filter;
+    }
+    body.page-revealed .page-stagger {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+      filter: blur(0px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1),
+                  filter 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    body.page-revealed .page-stagger-1 { transition-delay: 0.1s; }
+    body.page-revealed .page-stagger-2 { transition-delay: 0.25s; }
+    body.page-revealed .page-stagger-3 { transition-delay: 0.4s; }
+    body.page-revealed .page-stagger-4 { transition-delay: 0.6s; }
+    .gradient-hero {
+      background:
+        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(30,64,175,0.04) 0%, transparent 70%);
+    }
+    .gradient-cta {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #3730a3 100%);
+    }
+    .mock-light {
+      background: #ffffff;
+      color: rgba(0,0,0,0.85);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.04),
+        0 4px 16px rgba(0,0,0,0.05),
+        0 16px 48px rgba(0,0,0,0.08),
+        0 32px 80px rgba(0,0,0,0.04);
+    }
+    .mock-fade {
+      position: relative;
+    }
+    .mock-fade::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 25%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.95) 100%);
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 0 0 12px 12px;
+    }
+    .mock-embedded {
+      background: transparent;
+      color: rgba(0,0,0,0.85);
+    }
+    .mock-embedded.mock-fade::after {
+      height: 40%;
+      background: linear-gradient(to bottom, rgba(250,250,250,0) 0%, rgba(250,250,250,0.65) 45%, rgba(250,250,250,1) 100%);
+      border-radius: 0;
+      z-index: 10;
+    }
+    .mock-code {
+      background: #f5f5f7;
+    }
+    .highlight-text {
+      background: linear-gradient(to bottom, transparent 60%, rgba(30,64,175,0.12) 60%);
+      transition: color 0.5s ease, background 0.5s ease;
+    }
+    .highlight-text sup {
+      font-size: 0.45em;
+      font-weight: 700;
+      color: rgba(0,0,0,0.15);
+      margin-left: 2px;
+      vertical-align: super;
+      transition: color 0.5s ease;
+    }
+    .highlight-text.hl-active {
+      color: #1e40af;
+      background: linear-gradient(to bottom, transparent 60%, rgba(30,64,175,0.22) 60%);
+    }
+    .highlight-text.hl-active sup {
+      color: #1e40af;
+    }
+    .highlight-text.hl-dim {
+      color: rgba(0,0,0,0.2);
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.04) 60%);
+    }
+    .agent-card-wrap {
+    }
+    .agent-card-wrap.card-dim > div:first-child {
+      opacity: 0.4;
+      filter: grayscale(0.4) brightness(0.95);
+      transform: scale(0.97);
+      transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .agent-card-wrap.card-active > div:first-child {
+      opacity: 1;
+      filter: brightness(1.02);
+      transform: scale(1.02);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+      transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s ease;
+    }
+    .agent-card-wrap > div:first-child {
+      transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s ease;
+    }
+    .card-cursor {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transition: left 0.6s cubic-bezier(0.16,1,0.3,1), top 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+    }
+    .card-cursor svg { width: 12px; height: 12px; }
+    .card-cursor.cursor-show { opacity: 1; }
+    .card-el {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+      transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1), background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+      will-change: opacity, transform;
+    }
+    .card-el.el-hidden {
+      opacity: 0;
+      transform: translateY(6px) translateZ(0);
+    }
+    .card-el.el-show {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+    @keyframes fillBar {
+      from { width: 0; }
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    .type-text {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      display: inline-block;
+    }
+    .type-text.typing {
+      animation: typing 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); }
+      50% { box-shadow: 0 0 12px 4px rgba(16,185,129,0.15); }
+    }
+    .card-el.resolve-glow {
+      animation: pulseGlow 1.5s ease infinite;
+    }
+    .agent-card-wrap.card-hero > div:first-child {
+      opacity: 1;
+      filter: none;
+      transform: scale(1.04);
+      box-shadow: 0 0 30px rgba(16,185,129,0.15);
+    }
+    @keyframes scanLine {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    .scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .scan-line.scanning {
+      opacity: 1;
+      animation: scanLine 1s ease-in-out forwards;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(0,0,0,0.25);
+      letter-spacing: 0.06em;
+    }
+    .tag-label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .animate-scroll {
+      animation: ticker 25s linear infinite;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    @keyframes ticker {
+      0% { transform: translate3d(0,0,0); }
+      100% { transform: translate3d(-50%,0,0); }
+    }
+    .hero-gradient-bg {
+      position: relative;
+    }
+    .hero-gradient-bg::before,
+    .hero-gradient-bg::after {
+      content: '';
+      position: absolute;
+      inset: -200px -180px;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    .hero-gradient-bg::before {
+      background:
+        radial-gradient(ellipse 55% 60% at 5% 50%, rgba(30,64,175,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 55% at 95% 35%, rgba(220,38,38,0.12) 0%, transparent 70%);
+      animation: gradient-drift-1 12s ease-in-out infinite alternate;
+    }
+    .hero-gradient-bg::after {
+      content: '';
+      position: absolute;
+      inset: -200px -180px;
+      background:
+        radial-gradient(ellipse 65% 50% at 50% 95%, rgba(37,99,235,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 15%, rgba(30,64,175,0.1) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      animation: gradient-drift-2 14s ease-in-out infinite alternate;
+    }
+    @keyframes gradient-drift-1 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      33% { transform: translate3d(20px, -15px, 0) scale(1.03); }
+      66% { transform: translate3d(-15px, 10px, 0) scale(0.98); }
+      100% { transform: translate3d(10px, -8px, 0) scale(1.01); }
+    }
+    @keyframes gradient-drift-2 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      33% { transform: translate3d(-18px, 15px, 0) scale(1.02); }
+      66% { transform: translate3d(15px, -12px, 0) scale(0.97); }
+      100% { transform: translate3d(-8px, 10px, 0) scale(1.01); }
+    }
+    .btn-flow {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      overflow: hidden;
+      border-radius: 100px;
+      border: 1.5px solid rgba(0,0,0,0.25);
+      background: transparent;
+      padding: 8px 28px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(0,0,0,0.8);
+      cursor: pointer;
+      transition: all 600ms cubic-bezier(0.23,1,0.32,1);
+      text-decoration: none;
+    }
+    .btn-flow:hover {
+      border-color: transparent;
+      color: white;
+      border-radius: 12px;
+    }
+    .btn-flow:active {
+      transform: scale(0.95);
+    }
+    .btn-flow .flow-arrow-left {
+      position: absolute;
+      left: -25%;
+      width: 16px;
+      height: 16px;
+      z-index: 9;
+      transition: all 800ms cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-flow:hover .flow-arrow-left {
+      left: 14px;
+    }
+    .btn-flow:hover .flow-arrow-left path {
+      stroke: white;
+    }
+    .btn-flow .flow-text {
+      position: relative;
+      z-index: 1;
+      transform: translateX(-10px);
+      transition: all 800ms ease-out;
+    }
+    .btn-flow:hover .flow-text {
+      transform: translateX(10px);
+    }
+    .btn-flow .flow-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: #111;
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 800ms cubic-bezier(0.19,1,0.22,1);
+    }
+    .btn-flow:hover .flow-circle {
+      width: 220px;
+      height: 220px;
+      opacity: 1;
+    }
+    .btn-flow .flow-arrow-right {
+      position: absolute;
+      right: 14px;
+      width: 16px;
+      height: 16px;
+      z-index: 9;
+      transition: all 800ms cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-flow:hover .flow-arrow-right {
+      right: -25%;
+    }
+    .btn-flow:hover .flow-arrow-right path {
+      stroke: white;
+    }
+    .btn-slide {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 44px;
+      padding: 4px 52px 4px 20px;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      text-decoration: none;
+    }
+    .btn-slide:hover {
+      padding: 4px 20px 4px 52px;
+    }
+    .btn-slide .btn-text {
+      position: relative;
+      z-index: 10;
+      transition: all 0.5s ease;
+      white-space: nowrap;
+    }
+    .btn-slide .btn-icon {
+      position: absolute;
+      right: 4px;
+      width: 36px;
+      height: 36px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease;
+    }
+    .btn-slide-lg {
+      height: 52px;
+      padding: 5px 58px 5px 26px;
+    }
+    .btn-slide-lg .btn-icon {
+      width: 42px;
+      height: 42px;
+    }
+    .btn-slide-lg:hover {
+      padding: 5px 26px 5px 58px;
+    }
+    .btn-slide:hover .btn-icon {
+      right: calc(100% - 40px);
+      transform: rotate(45deg);
+    }
+    .btn-slide-lg:hover .btn-icon {
+      right: calc(100% - 47px);
+    }
+    .cinema-border {
+      position: relative;
+      z-index: 10;
+      padding: 10px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.5);
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.03),
+        0 8px 32px rgba(0,0,0,0.06),
+        0 24px 64px rgba(0,0,0,0.04);
+      transform: translateZ(0);
+    }
+    .cinema-viewport {
+      overflow: hidden;
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    @keyframes auroraShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes auroraShift2 {
+      0% { background-position: 100% 50%; transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+      33% { background-position: 50% 100%; transform: translate3d(0,0,0) scale(1.1) rotate(2deg); }
+      66% { background-position: 0% 50%; transform: translate3d(0,0,0) scale(0.95) rotate(-1deg); }
+      100% { background-position: 100% 50%; transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+    }
+    @keyframes auroraShift3 {
+      0% { opacity: 0.3; transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+      33% { opacity: 0.45; transform: translate3d(0,-8px,0) scale(1.03) rotate(1deg); }
+      66% { opacity: 0.25; transform: translate3d(0,5px,0) scale(0.98) rotate(-0.5deg); }
+      100% { opacity: 0.3; transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+    }
+    .aurora-layer-3 {
+      position: absolute;
+      inset: -80px -100px;
+      border-radius: 60px;
+      background:
+        radial-gradient(ellipse 50% 60% at 5% 50%, rgba(30,64,175,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 45% 55% at 95% 45%, rgba(220,38,38,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 35% at 50% 100%, rgba(37,99,235,0.1) 0%, transparent 70%);
+      filter: blur(60px);
+      animation: auroraShift3 12s ease-in-out infinite;
+      z-index: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    .aurora-wrap {
+      position: relative;
+    }
+    .aurora-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -40px -50px;
+      border-radius: 40px;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      background: linear-gradient(
+        270deg,
+        #1e3a8a, #1e40af, #2563eb,
+        #dc2626, #ef4444,
+        #1e3a8a, #1e40af, #2563eb,
+        #dc2626
+      );
+      background-size: 400% 400%;
+      animation: auroraShift 16s ease infinite;
+      filter: blur(60px);
+      opacity: 0.1;
+      z-index: 0;
+    }
+    .aurora-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -60px -70px;
+      border-radius: 50px;
+      background: linear-gradient(
+        135deg,
+        #1e40af, #2563eb,
+        #dc2626, #ef4444,
+        #1e40af
+      );
+      background-size: 400% 400%;
+      animation: auroraShift2 20s ease infinite;
+      filter: blur(80px);
+      opacity: 0.08;
+      z-index: 0;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    .cinema-scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      transform-origin: 50% 50%;
+      will-change: transform, transform-origin;
+      transition: opacity 0.8s ease, transform 1.6s cubic-bezier(0.22, 0.61, 0.36, 1), transform-origin 1.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .cinema-scene.active {
+      opacity: 1;
+    }
+    .chat-msg {
+      opacity: 0;
+      transform: translateY(16px) scale(0.97);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .chat-msg.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 20px;
+    }
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+    .agent-entry {
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .agent-entry.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .s2-field, #s2Resolution {
+      transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    #demoCursor {
+      transition: left 1.2s cubic-bezier(0.22, 0.61, 0.36, 1), top 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    #demoCursor.clicking svg {
+      transform: scale(0.8);
+      transition: transform 0.15s ease;
+    }
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 0.8s infinite;
+      color: rgba(0,0,0,0.4);
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .testimonial-bg {
+      background: linear-gradient(135deg, #eff1f5 0%, #e8ecf4 50%, #eff1f5 100%);
+    }
+    /* === MSP INTEGRATIONS GRID === */
+    .integ-grid-wrap {
+      position: relative;
+      border-radius: 28px;
+      overflow: visible;
+    }
+    .integ-grid-wrap::before {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 5%;
+      right: 5%;
+      height: 60px;
+      background:
+        radial-gradient(ellipse 50% 100% at 30% 50%, rgba(30,64,175,0.2) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 100% at 70% 50%, rgba(220,38,38,0.14) 0%, transparent 70%);
+      filter: blur(20px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .integ-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.04),
+        0 8px 32px rgba(99,102,241,0.07),
+        0 24px 64px rgba(99,102,241,0.05);
+      z-index: 1;
+    }
+    .integ-grid::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 75%;
+      background:
+        radial-gradient(ellipse 55% 80% at 25% 100%, rgba(30,64,175,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 80% at 75% 100%, rgba(220,38,38,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 50% 100%, rgba(37,99,235,0.1) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 2;
+      border-radius: 0 0 28px 28px;
+    }
+    .integ-cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+      overflow: hidden;
+      transition: background 0.35s ease;
+      background: transparent;
+    }
+    .integ-cell::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent);
+    }
+    .integ-cell::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      right: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.06), transparent);
+    }
+    .integ-cell:nth-child(4n)::before,
+    .integ-cell:last-child::before { display: none; }
+    .integ-cell:hover {
+      background: rgba(99,102,241,0.02);
+    }
+    .integ-cell canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .integ-cell .integ-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      opacity: 0.55;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .integ-cell:hover .integ-inner {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+    .integ-cell .integ-inner img {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      border-radius: 12px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+    }
+    .integ-cell .integ-inner .logo-text {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #475569;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: -0.1px;
+      white-space: nowrap;
+    }
+    .integ-title-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+    .integ-title-cell::after,
+    .integ-title-cell::before { display: none; }
+    @media (max-width: 768px) {
+      .integ-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    /* === PAPER AIRPLANE TRAIL === */
+    .hero-plane-trail {
+      position: absolute;
+      bottom: -28px;
+      left: -4%;
+      width: 128%;
+      height: 45px;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .trail-path {
+      stroke-dasharray: var(--trail-len, 900);
+      stroke-dashoffset: var(--trail-len, 900);
+    }
+    .plane-icon {
+      offset-path: path('M0 22 C60 26, 140 30, 240 24 S400 6, 460 12');
+      offset-distance: 0%;
+      offset-rotate: auto;
+      opacity: 0;
+      filter: drop-shadow(0 1px 3px rgba(220,38,38,0.3));
+    }
+    /* === SCROLL ANIMATIONS === */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .reveal-blur {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, filter 0.45s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-blur.visible {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+    .stagger-1 { transition-delay: 0.05s !important; }
+    .stagger-2 { transition-delay: 0.12s !important; }
+    .stagger-3 { transition-delay: 0.19s !important; }
+    .stagger-4 { transition-delay: 0.26s !important; }
+    .stagger-5 { transition-delay: 0.33s !important; }
+    .stagger-6 { transition-delay: 0.4s !important; }
+    .stagger-7 { transition-delay: 0.47s !important; }
+    .stagger-8 { transition-delay: 0.54s !important; }
+    .parallax-slow {
+      transition: transform 0.1s linear;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    #mainHeader {
+      transform: translateZ(0);
+      transition: top 0.9s cubic-bezier(0.16,1,0.3,1),
+                  left 0.9s cubic-bezier(0.16,1,0.3,1),
+                  right 0.9s cubic-bezier(0.16,1,0.3,1),
+                  border-radius 0.9s cubic-bezier(0.16,1,0.3,1),
+                  background-color 0.6s ease,
+                  box-shadow 0.7s ease,
+                  border-color 0.6s ease;
+    }
+    #mainHeader > div {
+      transition: height 0.9s cubic-bezier(0.16,1,0.3,1),
+                  padding 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    #mainHeader.floating {
+      top: 12px;
+      left: calc(50% - 540px) !important;
+      right: calc(50% - 540px) !important;
+      border-radius: 980px;
+      border: 1px solid rgba(0,0,0,0.08) !important;
+      background: rgba(255,255,255,0.92) !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    #mainHeader.floating > div {
+      max-width: 100% !important;
+      padding-left: 20px !important;
+      padding-right: 8px !important;
+      height: 54px;
+    }
+    /* Hide original buttons in floating state */
+    #mainHeader.floating .nav-cta-schedule,
+    #mainHeader.floating .nav-cta-login {
+      display: none !important;
+    }
+    /* Show pill buttons in floating state */
+    #mainHeader.floating .nav-pill-btns {
+      display: flex !important;
+    }
+    /* Animated pill icon buttons */
+    .nav-pill-btns {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .pill-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 980px;
+      cursor: pointer;
+      text-decoration: none;
+      overflow: hidden;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 40px;
+      white-space: nowrap;
+    }
+    .pill-btn-login {
+      width: 40px;
+      background: rgba(0,0,0,0.9);
+    }
+    .pill-btn-login:hover {
+      width: 130px;
+    }
+    .pill-btn-schedule {
+      width: 40px;
+      background: #1e40af;
+    }
+    .pill-btn-schedule:hover {
+      width: 200px;
+    }
+    .pill-btn .pill-btn-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .pill-btn:hover .pill-btn-icon {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    .pill-btn .pill-btn-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      transition: opacity 0.25s ease 0.1s;
+    }
+    .pill-btn:hover .pill-btn-label {
+      opacity: 1;
+    }
+
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 767px) {
+      /* Nav: hide login/schedule buttons, show only logo + pill btns */
+      .nav-cta-login,
+      .nav-cta-schedule {
+        display: none !important;
+      }
+      .nav-pill-btns {
+        display: flex !important;
+      }
+      .pill-btn { height: 36px; }
+      .pill-btn-icon { width: 36px; height: 36px; }
+
+      /* Hero: stack vertically */
+      .gradient-hero { padding-top: 7rem; }
+      .gradient-hero > div > div:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+      }
+      .gradient-hero h1 {
+        font-size: 36px !important;
+        max-width: 100% !important;
+      }
+      .gradient-hero h1 .font-serif-accent {
+        font-size: 40px !important;
+      }
+      .gradient-hero .hero-plane-trail {
+        width: 280px;
+        bottom: -20px;
+      }
+      .gradient-hero > div > div:first-child > div:last-child {
+        max-width: 100% !important;
+        padding-bottom: 0;
+      }
+      .gradient-hero > div > div:first-child > div:last-child p {
+        text-align: left !important;
+        font-size: 13px !important;
+      }
+      .gradient-hero > div > div:first-child > div:last-child .flex {
+        justify-content: flex-start !important;
+      }
+
+      /* Cinema viewport */
+      .cinema-border { padding: 4px; border-radius: 16px; }
+      .cinema-viewport { border-radius: 12px; }
+
+      /* Trusted by ticker */
+      section.py-20.border-b > div {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      /* Stats: 2x2 grid */
+      .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+      }
+      .grid.grid-cols-4 .text-\[38px\] {
+        font-size: 28px !important;
+      }
+
+      /* Value prop heading */
+      #valuePropSection h2 {
+        font-size: 28px !important;
+        line-height: 1.25 !important;
+      }
+      #valuePropSection h2 br { display: none; }
+
+      /* Agent cards: stack */
+      #agentCardsGrid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+
+      /* Integration grid: simpler mobile layout */
+      .integ-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        border-radius: 20px;
+      }
+      .integ-cell { min-height: 120px; }
+      .integ-cell:nth-child(2n)::before { display: none; }
+      .integ-title-cell {
+        grid-column: span 2 !important;
+        grid-row: span 1 !important;
+        padding: 24px !important;
+      }
+      .integ-title-cell h2 {
+        font-size: 26px !important;
+      }
+
+      /* Feature detail sections */
+      section.py-28 .grid.gap-20 {
+        gap: 2.5rem !important;
+      }
+      section.py-28 h2.text-\[38px\] {
+        font-size: 28px !important;
+      }
+      .mock-light {
+        overflow: hidden;
+      }
+      .mock-light .flex[style*="min-height:520px"] {
+        min-height: 320px !important;
+        transform: scale(0.75);
+        transform-origin: top left;
+      }
+
+      /* Large section headings */
+      .mobile-h2-sm {
+        font-size: 26px !important;
+        line-height: 1.2 !important;
+      }
+
+      /* CTA section */
+      section.py-32 h2 {
+        font-size: 34px !important;
+      }
+      section.py-32 h2 .font-serif-accent {
+        font-size: 38px !important;
+      }
+      section.py-32 .flex-wrap {
+        flex-direction: column;
+        align-items: center;
+      }
+      section.py-32 .btn-slide-lg,
+      section.py-32 .btn-flip {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      /* Footer */
+      footer .flex.items-center.justify-between.mb-10 {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      footer .grid.grid-cols-2.md\:grid-cols-5 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Feature bullet grids */
+      .grid.grid-cols-2.gap-x-10 {
+        gap: 0.5rem 1rem !important;
+      }
+
+      /* General spacing */
+      .px-8 { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .py-28 { padding-top: 4rem; padding-bottom: 4rem; }
+      .py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+      .mb-16 { margin-bottom: 2.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .gradient-hero h1 {
+        font-size: 30px !important;
+      }
+      .gradient-hero h1 .font-serif-accent {
+        font-size: 34px !important;
+      }
+      .grid.grid-cols-4 .text-\[38px\] {
+        font-size: 24px !important;
+      }
+      section.py-32 h2 {
+        font-size: 28px !important;
+      }
+      section.py-32 h2 .font-serif-accent {
+        font-size: 32px !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-page text-primary-fg page-loading">
+  <div class="page-reveal-overlay"></div>
+
+  <!-- Header -->
+  <header id="mainHeader" class="fixed top-0 left-0 right-0 z-50 bg-page/80 backdrop-blur-xl border-b border-border-default page-stagger page-stagger-1">
+    <div class="max-w-[1600px] mx-auto px-8 h-[64px] flex items-center justify-between relative">
+      <a href="#" class="flex items-center gap-2 shrink-0">
+        <img src="favicon.png" alt="AI Autopilot" class="w-8 h-8 rounded-lg">
+        <span class="font-bold text-[19px] tracking-[-0.01em]"><span class="text-brand-dark">AI Autop</span><span class="text-brand-accent">i</span><span class="text-brand-dark">lo</span><span class="text-brand-accent">t</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">Features</a>
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">Integrations</a>
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">Pricing</a>
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">About</a>
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">Blog</a>
+        <a href="#" class="text-[14px] text-secondary-fg hover:text-primary-fg transition font-medium">Trust Center</a>
+      </nav>
+      <div class="flex items-center gap-4 shrink-0">
+        <a href="#" class="btn-flow nav-cta-login">
+          <svg class="flow-arrow-left" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7" stroke="rgba(0,0,0,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="flow-text">Login</span>
+          <span class="flow-circle"></span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7" stroke="rgba(0,0,0,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://meetings.hubspot.com/ai-autopilot" class="btn-slide bg-brand text-white text-[13px] font-semibold nav-cta-schedule" style="height:38px;">
+              <span class="btn-text">Schedule Demo</span>
+              <div class="btn-icon bg-white" style="width:30px;height:30px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.5 2.5L10 13.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21.5 2.5L15 21.5L10 13.5L2.5 10.5L21.5 2.5Z" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M10 13.5L15 21.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </a>
+        <!-- Animated pill buttons (visible only in floating state) -->
+        <div class="nav-pill-btns">
+          <a href="#" class="pill-btn pill-btn-login">
+            <span class="pill-btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </span>
+            <span class="pill-btn-label">Login <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          </a>
+          <a href="https://meetings.hubspot.com/ai-autopilot" class="pill-btn pill-btn-schedule">
+            <span class="pill-btn-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.5 2.5L10 13.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21.5 2.5L15 21.5L10 13.5L2.5 10.5L21.5 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </span>
+            <span class="pill-btn-label">Schedule Demo <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.5 2.5L10 13.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.5 2.5L15 21.5L10 13.5L2.5 10.5L21.5 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-52 pb-0 gradient-hero">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="flex justify-between items-end mb-10 max-w-[1400px] mx-auto">
+        <h1 class="text-[56px] font-bold leading-[1.05] tracking-[-0.035em] max-w-[560px] page-stagger page-stagger-2">
+          Put your MSP on<br><span class="relative inline-block"><span class="font-serif-accent italic text-brand text-[62px]">autop<span class="text-red-500">i</span>lo<span class="text-red-500">t</span></span><svg class="hero-plane-trail" viewBox="0 0 480 40" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ef4444" stop-opacity="0"/><stop offset="25%" stop-color="#ef4444" stop-opacity="0.15"/><stop offset="60%" stop-color="#ef4444" stop-opacity="0.35"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.55"/></linearGradient></defs><path class="trail-path" d="M0 22 C60 26, 140 30, 240 24 S400 6, 460 12" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/><g class="plane-icon"><g transform="scale(1.6)"><path d="M13 0 L-5 -6 L-2 0 L-5 6 Z" fill="#ef4444"/><path d="M13 0 L-2 0 L-5 6 Z" fill="#dc2626"/><path d="M-2 0 L-5 -6 L-7.5 -4 L-3.5 0 L-7.5 4 L-5 6 Z" fill="#b91c1c" opacity="0.45"/></g></g></svg></span>
+        </h1>
+        <div class="max-w-[420px] pb-2 page-stagger page-stagger-3">
+          <p class="text-secondary-fg text-[14px] leading-[1.65] mb-4 text-right">
+            Built by MSPs, for MSPs. Automate ticket triage, dispatch, resolution planning, and IT operations with intelligent AI agents.
+          </p>
+          <div class="flex items-center justify-end gap-3">
+            <a href="https://meetings.hubspot.com/ai-autopilot" class="btn-slide bg-brand text-white text-[13px] font-semibold">
+              <span class="btn-text">Schedule Demo</span>
+              <div class="btn-icon bg-white">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.5 2.5L10 13.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21.5 2.5L15 21.5L10 13.5L2.5 10.5L21.5 2.5Z" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M10 13.5L15 21.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </a>
+            <a href="#" class="btn-flip group relative inline-flex h-[44px] items-center justify-center overflow-hidden rounded-full border border-border-strong text-[13px] font-semibold">
+              <div class="inline-flex h-[44px] translate-y-0 items-center justify-center px-6 text-primary-fg transition duration-500 group-hover:-translate-y-[150%]">
+                Learn more
+              </div>
+              <div class="absolute inline-flex h-[44px] w-full translate-y-[100%] items-center justify-center text-white transition duration-500 group-hover:translate-y-0">
+                <span class="absolute inset-0 translate-y-full skew-y-6 bg-brand transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0"></span>
+                <span class="z-10">Learn more</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Screenshot with Gradient Background -->
+      <div class="relative mt-14 hero-gradient-bg page-stagger page-stagger-4 max-w-[1440px] mx-auto">
+      <div class="aurora-wrap">
+      <div class="aurora-layer-3"></div>
+      <div class="cinema-border">
+      <div class="cinema-viewport mock-light" style="height: 750px;">
+        <!-- Browser Chrome -->
+        <div class="flex items-center gap-2 px-4 py-2.5 bg-[#f5f5f7] border-b border-black/[0.08] relative z-50">
+          <div class="flex items-center gap-1.5">
+            <div class="w-[10px] h-[10px] rounded-full bg-[#ff5f57]"></div>
+            <div class="w-[10px] h-[10px] rounded-full bg-[#febc2e]"></div>
+            <div class="w-[10px] h-[10px] rounded-full bg-[#28c840]"></div>
+          </div>
+          <div class="flex-1 flex justify-center">
+            <div class="bg-white/80 border border-black/[0.08] rounded-md px-4 py-[3px] text-[10px] text-black/35 min-w-[260px] text-center">www.aiautopilot.ai</div>
+          </div>
+          <div class="w-[46px]"></div>
+        </div>
+        <!-- Animated cursor -->
+        <div id="demoCursor" class="absolute z-[60] pointer-events-none" style="display:none; left:50%; top:50%;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1"><path d="M5.65 2.09 20.8 12.58l-7.37 1.27-4.42 6.17z"/></svg>
+        </div>
+        <!-- SCENE 1: Agent Command Chat -->
+        <div class="cinema-scene active" id="scene1" style="padding-top: 36px;">
+          <div class="flex h-full">
+            <!-- Sidebar -->
+            <div class="w-[52px] bg-gray-50/60 border-r border-black/[0.06] py-3 flex flex-col items-center gap-1">
+              <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center mb-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></div>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black/20"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black/20"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg></div>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black/20"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/></svg></div>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black/20"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/></svg></div>
+            </div>
+            <!-- Chat -->
+            <div class="flex-1 flex flex-col">
+              <div class="flex-1 px-6 overflow-hidden flex flex-col justify-center relative">
+                <!-- Welcome/initial state (centered) -->
+                <div id="s1InitialView" class="flex flex-col items-center">
+                  <div class="text-center mb-6" id="s1Welcome">
+                    <h3 class="text-[16px] font-bold text-black/80 mb-1">Let Us Create A Ticket So I Can Help You With Your Issue</h3>
+                    <p class="text-[11px] text-black/35">Describe your issue below or select a category</p>
+                  </div>
+                  <!-- Input bar (centered, not at bottom) -->
+                  <div class="w-full max-w-[500px] mb-6">
+                    <div class="flex items-center gap-3 bg-white border border-black/[0.10] rounded-xl px-4 py-3 shadow-sm">
+                      <span class="text-[12px] text-black/25 flex-1" id="s1Input">Describe your issue...</span>
+                      <div class="bg-brand text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg" id="s1OpenBtn">Open Ticket</div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2.5 max-w-[500px] w-full transition-all duration-500" id="s1Categories">
+                    <div class="border border-black/[0.08] rounded-lg p-2.5"><div class="text-[11px] font-semibold text-black/70 mb-0.5">Hardware Issues</div><div class="text-[10px] text-black/30">My printer is not working or turning on.</div></div>
+                    <div class="border border-black/[0.08] rounded-lg p-2.5"><div class="text-[11px] font-semibold text-black/70 mb-0.5">Software Issues</div><div class="text-[10px] text-black/30">I am not receiving any emails nor can I send.</div></div>
+                    <div class="border border-black/[0.08] rounded-lg p-2.5"><div class="text-[11px] font-semibold text-black/70 mb-0.5">Security Issues</div><div class="text-[10px] text-black/30">I think I have malware installed in my PC.</div></div>
+                    <div class="border border-black/[0.08] rounded-lg p-2.5"><div class="text-[11px] font-semibold text-black/70 mb-0.5">Account or Billing Issues</div><div class="text-[10px] text-black/30">I need my workers password reset.</div></div>
+                  </div>
+                </div>
+                <!-- Chat messages (hidden initially, shown after typing) -->
+                <div id="s1Chat" class="space-y-3 max-w-[550px] mx-auto w-full flex-col justify-center px-6 overflow-hidden" style="display:none; min-height: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 2: Agent Triage & Dispatch -->
+        <div class="cinema-scene" id="scene2" style="padding-top: 74px;">
+          <div class="flex h-full">
+            <div class="w-[52px] bg-gray-50/60 border-r border-black/[0.06] py-3 flex flex-col items-center gap-1">
+              <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center mb-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></div>
+            </div>
+            <!-- Ticket detail -->
+            <div class="w-[340px] border-r border-black/[0.06] p-5 overflow-hidden">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-10 h-10 rounded-lg bg-red-50 border border-red-200/50 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+                <div><div class="text-[10px] text-black/25 font-medium">TKT-4281</div><div class="text-[15px] font-bold leading-tight">Printer offline</div></div>
+              </div>
+              <p class="text-[11px] text-black/40 leading-[1.5] mb-4">HP LaserJet in Suite 200 showing offline status. Multiple users unable to print since 9:15 AM.</p>
+              <div class="space-y-0 text-[11px]" id="s2Fields">
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Board</span><span class="text-black/65">Service Desk</span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Priority</span><span class="flex items-center gap-1"><span class="flex gap-[2px]"><span class="w-[3px] h-2 bg-orange-500 rounded-sm"></span><span class="w-[3px] h-2 bg-orange-500 rounded-sm"></span><span class="w-[3px] h-2 bg-orange-500 rounded-sm"></span></span><span class="text-black/65">High</span></span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Assigned</span><span class="flex items-center gap-1"><div class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500"></div><span class="text-black/65">John Doe</span></span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Status</span><span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span class="text-black/65">In Progress</span></span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Client</span><span class="text-black/65">Acme Corp</span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">SLA</span><span class="text-emerald-600 font-medium">4h — on track</span></div>
+                <div class="flex justify-between py-1.5 border-b border-black/[0.04] s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">AI Confidence</span><span class="text-black/65 font-bold">94%</span></div>
+                <div class="flex justify-between py-1.5 s2-field" style="opacity:0;transform:translateY(4px)"><span class="text-black/25">Similar Tickets</span><span class="text-brand font-medium">12 matches ›</span></div>
+              </div>
+              <div class="mt-3 pt-3 border-t border-black/[0.06]" id="s2Resolution" style="opacity:0;transform:translateY(4px)">
+                <div class="text-[9px] text-black/20 uppercase tracking-widest font-semibold mb-0.5">Resolution Time</div>
+                <div class="text-[26px] font-bold text-black/80 tracking-tight">8 min <span class="text-[12px] text-emerald-600 font-semibold">↓75%</span></div>
+              </div>
+            </div>
+            <!-- AI Agent Log -->
+            <div class="flex-1 p-5 overflow-hidden">
+              <div class="flex items-center gap-1 mb-5">
+                <span class="text-[11px] font-semibold text-black/80 bg-gray-100 px-3 py-1 rounded-md">AI Agent Log</span>
+                <span class="text-[11px] text-black/25 px-3 py-1">Config Data</span>
+                <span class="text-[11px] text-black/25 px-3 py-1">Resolution Plan</span>
+              </div>
+              <div class="space-y-4 pl-4 border-l-2 border-black/[0.05]" id="s2Agents">
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-blue-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5"><span class="font-semibold text-blue-600">Triage Agent</span><span>· 2s ago</span></div>
+                    <p class="text-[11px] text-black/55 leading-[1.5]">Classified as Hardware → Printer. Priority set to High based on Premium SLA and multi-user impact. Routed to Service Desk.</p>
+                  </div>
+                </div>
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-violet-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5"><span class="font-semibold text-violet-600">Config Agent</span><span>· 5s ago</span></div>
+                    <p class="text-[11px] text-black/55 leading-[1.5] mb-2">Pulled device config from ConnectWise Automate. HP LaserJet M404dn, IP 10.0.1.45.</p>
+                    <div class="bg-[#f5f5f7] rounded-md border border-black/[0.05] p-2.5 font-mono text-[10px] leading-[1.7]">
+                      <span class="text-blue-600">"device"</span>: <span class="text-emerald-700">"HP LaserJet M404dn"</span>,<br>
+                      <span class="text-blue-600">"status"</span>: <span class="text-red-600">"offline"</span>,<br>
+                      <span class="text-blue-600">"ip"</span>: <span class="text-emerald-700">"10.0.1.45"</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5"><span class="font-semibold text-emerald-600">Resolution Agent</span><span>· 8s ago</span></div>
+                    <p class="text-[11px] text-black/55 leading-[1.5]">Found 12 similar tickets in history. Top resolution: restart print spooler via RMM. Success rate: <span class="text-emerald-600 font-bold">94%</span>.</p>
+                  </div>
+                </div>
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-amber-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5"><span class="font-semibold text-amber-600">Dispatch Agent</span><span>· 10s ago</span></div>
+                    <p class="text-[11px] text-black/55 leading-[1.5]">Assigned to John Doe — printer specialist, currently 2 tickets in queue, available in 15 min.</p>
+                  </div>
+                </div>
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-purple-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5"><span class="font-semibold text-purple-600">Auto-remediation</span><span>· 12s ago</span></div>
+                    <p class="text-[11px] text-black/55 leading-[1.5]">Executing print spooler restart via ConnectWise Automate. Monitoring connectivity...</p>
+                  </div>
+                </div>
+                <div class="agent-entry relative">
+                  <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 -ml-[21px] mt-0.5 absolute ring-[3px] ring-white"></div>
+                  <div class="ml-2">
+                    <div class="flex items-center gap-1.5 text-[10px] text-black/25 mb-0.5">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span class="font-semibold text-emerald-600">Resolved</span><span>· 15s ago</span>
+                    </div>
+                    <p class="text-[11px] text-black/55 leading-[1.5]">Printer back online. Confirmed by RMM ping. Ticket closed with auto-generated resolution notes.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Logos Ticker -->
+  <section class="py-20 border-b border-border-subtle reveal">
+    <div class="max-w-[1600px] mx-auto px-8 flex items-center gap-10">
+      <span class="text-[13px] text-tertiary-fg font-medium border border-border-strong rounded-full px-4 py-1.5 whitespace-nowrap shrink-0">Trusted and integrated by</span>
+      <div class="flex-1 overflow-hidden">
+        <div class="flex animate-scroll" style="width: max-content;">
+          <div class="flex items-center shrink-0" style="gap: 56px; padding-right: 56px;">
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/it_glue.png" alt="IT Glue" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">IT Glue</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/liongard.png" alt="Liongard" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Liongard</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/rewst.png" alt="Rewst" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Rewst</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/chatgpt.png" alt="OpenAI" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">OpenAI</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/claude.png" alt="Claude" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Claude</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/connectwise.png" alt="ConnectWise" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">ConnectWise</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/autotask.png" alt="Autotask" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Autotask</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/kaseya_bms.png" alt="BMS" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">BMS</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/halo_psa.png" alt="Halo" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Halo</span>
+            </div>
+          </div>
+          <div class="flex items-center shrink-0" style="gap: 56px; padding-right: 56px;">
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/it_glue.png" alt="IT Glue" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">IT Glue</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/liongard.png" alt="Liongard" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Liongard</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/rewst.png" alt="Rewst" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Rewst</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/chatgpt.png" alt="OpenAI" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">OpenAI</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/claude.png" alt="Claude" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Claude</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/connectwise.png" alt="ConnectWise" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">ConnectWise</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/autotask.png" alt="Autotask" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Autotask</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/kaseya_bms.png" alt="BMS" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">BMS</span>
+            </div>
+            <div class="flex flex-col items-center gap-2.5 w-[90px]">
+              <img loading="lazy" decoding="async" src="https://aiautopilot.ai/halo_psa.png" alt="Halo" class="h-11 w-11 object-contain">
+              <span class="text-[11px] text-tertiary-fg font-medium">Halo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="py-6">
+    <div class="max-w-[1200px] mx-auto px-8">
+      <div class="flex items-center justify-between py-5 border-t border-b border-border-subtle">
+        <div class="reveal-blur stagger-1 flex items-baseline gap-3">
+          <span class="text-[32px] font-jakarta font-bold text-primary-fg tracking-[-0.03em] stat-num" data-target="75" data-suffix="%">0%</span>
+          <span class="text-[13px] text-tertiary-fg font-medium">Faster Ticket Resolution</span>
+        </div>
+        <div class="w-px h-8 bg-border-subtle"></div>
+        <div class="reveal-blur stagger-2 flex items-baseline gap-3">
+          <span class="text-[32px] font-jakarta font-bold text-primary-fg tracking-[-0.03em] stat-num" data-target="40" data-suffix="%">0%</span>
+          <span class="text-[13px] text-tertiary-fg font-medium">Reduced Labor Costs</span>
+        </div>
+        <div class="w-px h-8 bg-border-subtle"></div>
+        <div class="reveal-blur stagger-3 flex items-baseline gap-3">
+          <span class="text-[32px] font-jakarta font-bold text-primary-fg tracking-[-0.03em] stat-num" data-target="60" data-suffix="%">0%</span>
+          <span class="text-[13px] text-tertiary-fg font-medium">Higher Client Satisfaction</span>
+        </div>
+        <div class="w-px h-8 bg-border-subtle"></div>
+        <div class="reveal-blur stagger-4 flex items-baseline gap-3">
+          <span class="text-[32px] font-jakarta font-bold text-primary-fg tracking-[-0.03em]">24/7</span>
+          <span class="text-[13px] text-tertiary-fg font-medium">Automated Support Coverage</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Prop Section — auto-cycling highlight -->
+  <section id="valuePropSection" class="py-20 cv-auto">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="max-w-[900px] mb-16">
+        <h2 class="text-[40px] font-bold leading-[1.25] tracking-[-0.025em]">
+          AI agents that <span class="highlight-text" data-step="1">triage<sup>01</sup></span>, <span class="highlight-text" data-step="2">dispatch<sup>02</sup></span>,<br>
+          and <span class="highlight-text" data-step="3">resolve<sup>03</sup></span> tickets — before your<br>
+          techs even log in.
+        </h2>
+      </div>
+
+      <!-- Four Agent Cards -->
+      <div class="grid md:grid-cols-4 gap-7 items-start" id="agentCardsGrid">
+
+        <!-- Card 1: Triage — ticket scanning & classification -->
+        <div class="agent-card-wrap" data-card-step="1" id="cardTriage">
+          <div class="rounded-xl border border-border-default overflow-hidden mb-5 bg-white relative" style="min-height:270px">
+            <div class="card-cursor" id="cursorTriage"><svg viewBox="0 0 12 19" fill="none"><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" fill="#111"/><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" stroke="#fff" stroke-width="0.5"/></svg></div>
+            <div class="scan-line" id="triageScan"></div>
+            <div class="p-5 text-[12px]">
+              <div class="flex items-center gap-2.5 mb-3 text-black/25 text-[10px] uppercase tracking-widest font-semibold">
+                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                <span>Triage Agent</span>
+              </div>
+              <!-- Ticket subject -->
+              <div class="card-el rounded-lg px-3 py-2 bg-gray-50 border border-black/[0.05] mb-3" id="triageTicket">
+                <div class="text-[10px] text-black/25 mb-0.5">TKT-4281</div>
+                <div class="text-[12px] font-semibold text-black/70">Printer offline — HP LaserJet Suite 200</div>
+              </div>
+              <!-- Classification tags -->
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                <span class="card-el rounded-md px-2 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40" id="triageTag1">Hardware</span>
+                <span class="card-el text-[10px] text-black/20 py-0.5" id="triageArrow1">→</span>
+                <span class="card-el rounded-md px-2 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40" id="triageTag2">Printer</span>
+                <span class="card-el text-[10px] text-black/20 py-0.5" id="triageArrow2">→</span>
+                <span class="card-el rounded-md px-2 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40" id="triageTag3">Power Issue</span>
+              </div>
+              <!-- Priority + Confidence -->
+              <div class="flex gap-2">
+                <div class="card-el flex-1 rounded-lg px-2.5 py-2 border border-black/[0.05]" id="triagePri">
+                  <div class="text-[9px] text-black/20 mb-1">Priority</div>
+                  <div class="flex items-center gap-1">
+                    <span class="flex gap-[2px]"><span class="w-[3px] h-[8px] bg-orange-500 rounded-sm"></span><span class="w-[3px] h-[8px] bg-orange-500 rounded-sm"></span><span class="w-[3px] h-[8px] bg-orange-500 rounded-sm"></span></span>
+                    <span class="text-[10px] font-semibold text-black/60">High</span>
+                  </div>
+                </div>
+                <div class="card-el flex-1 rounded-lg px-2.5 py-2 border border-black/[0.05]" id="triageConf">
+                  <div class="text-[9px] text-black/20 mb-1">Confidence</div>
+                  <div class="flex items-center gap-1.5">
+                    <div class="flex-1 h-[5px] bg-black/[0.04] rounded-full overflow-hidden"><div class="h-full bg-blue-500 rounded-full" id="triageBar" style="width:0;transition:width 1s cubic-bezier(0.16,1,0.3,1)"></div></div>
+                    <span class="text-[10px] font-bold text-black/50" id="triagePct">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-[13px] text-black/25 font-semibold mb-2">01</div>
+          <h3 class="text-[17px] font-bold mb-2 leading-snug tracking-[-0.01em]">AI Ticket Triage</h3>
+          <p class="text-[15px] text-secondary-fg leading-[1.6]">Automatically categorizes tickets by type, urgency, and complexity using MSP best practices.</p>
+        </div>
+
+        <!-- Card 2: Dispatch — tech matching with scanning -->
+        <div class="agent-card-wrap" data-card-step="2" id="cardDispatch">
+          <div class="rounded-xl border border-border-default overflow-hidden mb-5 bg-white relative" style="min-height:270px">
+            <div class="card-cursor" id="cursorDispatch"><svg viewBox="0 0 12 19" fill="none"><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" fill="#111"/><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" stroke="#fff" stroke-width="0.5"/></svg></div>
+            <div class="p-5 text-[12px]">
+              <div class="flex items-center gap-2.5 mb-3 text-black/25 text-[10px] uppercase tracking-widest font-semibold">
+                <div class="w-2 h-2 rounded-full bg-amber-500"></div>
+                <span>Dispatch Agent</span>
+              </div>
+              <div class="space-y-1.5">
+                <!-- Tech 1 — will be selected -->
+                <div class="card-el flex items-center gap-2.5 rounded-lg px-3 py-2 border border-black/[0.05] transition-all" id="dispTech1">
+                  <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=68" alt="" class="w-6 h-6 rounded-full object-cover shrink-0">
+                  <div class="flex-1 min-w-0">
+                    <div class="text-[11px] font-semibold text-black/70">John Doe</div>
+                    <div class="text-[9px] text-black/25">Printer specialist</div>
+                  </div>
+                  <div class="text-[9px] text-black/20" id="dispMatch1">2 in queue</div>
+                </div>
+                <!-- Tech 2 -->
+                <div class="card-el flex items-center gap-2.5 rounded-lg px-3 py-2 border border-black/[0.05]" id="dispTech2">
+                  <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=47" alt="" class="w-6 h-6 rounded-full object-cover shrink-0">
+                  <div class="flex-1 min-w-0">
+                    <div class="text-[11px] font-semibold text-black/70">Sarah Chen</div>
+                    <div class="text-[9px] text-black/25">Network admin</div>
+                  </div>
+                  <div class="text-[9px] text-black/20">5 in queue</div>
+                </div>
+                <!-- Tech 3 -->
+                <div class="card-el flex items-center gap-2.5 rounded-lg px-3 py-2 border border-black/[0.05]" id="dispTech3">
+                  <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=59" alt="" class="w-6 h-6 rounded-full object-cover shrink-0">
+                  <div class="flex-1 min-w-0">
+                    <div class="text-[11px] font-semibold text-black/70">Mike Torres</div>
+                    <div class="text-[9px] text-black/25">General support</div>
+                  </div>
+                  <div class="text-[9px] text-black/20">Off shift</div>
+                </div>
+              </div>
+              <!-- Assigned banner -->
+              <div class="card-el mt-2.5 rounded-lg px-3 py-2 bg-amber-50 border border-amber-200/40 flex items-center justify-between" id="dispAssigned">
+                <span class="text-[10px] font-semibold text-amber-700">Assigned to John Doe</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="text-[13px] text-black/25 font-semibold mb-2">02</div>
+          <h3 class="text-[17px] font-bold mb-2 leading-snug tracking-[-0.01em]">AI Smart Dispatch</h3>
+          <p class="text-[15px] text-secondary-fg leading-[1.6]">Routes tickets to the right tech based on expertise, availability, and current workload.</p>
+        </div>
+
+        <!-- Card 3: Self-Service — mini chat conversation -->
+        <div class="agent-card-wrap" data-card-step="3" id="cardSelfService">
+          <div class="rounded-xl border border-border-default overflow-hidden mb-5 bg-white relative" style="min-height:270px">
+            <div class="card-cursor" id="cursorSS"><svg viewBox="0 0 12 19" fill="none"><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" fill="#111"/><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" stroke="#fff" stroke-width="0.5"/></svg></div>
+            <div class="p-5 text-[12px]">
+              <div class="flex items-center gap-2.5 mb-3 text-black/25 text-[10px] uppercase tracking-widest font-semibold">
+                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                <span>Self-Service Agent</span>
+              </div>
+              <div class="space-y-2" id="ssChat">
+                <div class="card-el flex gap-2" id="ssMsg1">
+                  <div class="w-4 h-4 rounded-full bg-violet-100 border border-violet-200/50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-[6px] text-violet-500 font-bold">AI</span></div>
+                  <div class="bg-violet-50/60 rounded-lg rounded-tl-sm px-2.5 py-1.5 text-[10px] text-black/55 border border-violet-200/30 max-w-[85%]"><span class="type-text" id="ssText1">Which floor is the printer on?</span></div>
+                </div>
+                <div class="card-el flex gap-2 justify-end" id="ssMsg2">
+                  <div class="bg-gray-100 rounded-lg rounded-tr-sm px-2.5 py-1.5 text-[10px] text-black/55 max-w-[75%]"><span class="type-text" id="ssText2">2nd floor, Suite 200</span></div>
+                </div>
+                <div class="card-el flex gap-2" id="ssMsg3">
+                  <div class="w-4 h-4 rounded-full bg-violet-100 border border-violet-200/50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-[6px] text-violet-500 font-bold">AI</span></div>
+                  <div class="bg-violet-50/60 rounded-lg rounded-tl-sm px-2.5 py-1.5 text-[10px] text-black/55 border border-violet-200/30 max-w-[85%]"><span class="type-text" id="ssText3">Any lights on the printer?</span></div>
+                </div>
+                <div class="card-el flex gap-2 justify-end" id="ssMsg4">
+                  <div class="bg-gray-100 rounded-lg rounded-tr-sm px-2.5 py-1.5 text-[10px] text-black/55 max-w-[75%]"><span class="type-text" id="ssText4">No, completely dead</span></div>
+                </div>
+              </div>
+              <div class="card-el mt-2 rounded-lg px-2.5 py-1.5 bg-violet-50 border border-violet-200/40 text-center" id="ssDone">
+                <span class="text-[10px] font-semibold text-violet-600">✓ Diagnostic complete — escalating</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-[13px] text-black/25 font-semibold mb-2">03</div>
+          <h3 class="text-[17px] font-bold mb-2 leading-snug tracking-[-0.01em]">AI Self-Service</h3>
+          <p class="text-[15px] text-secondary-fg leading-[1.6]">Dynamically gathers diagnostic info from end users with intelligent follow-up questions.</p>
+        </div>
+
+        <!-- Card 4: Resolution — KB search & auto-resolve -->
+        <div class="agent-card-wrap" data-card-step="3" id="cardResolution">
+          <div class="rounded-xl border border-border-default overflow-hidden mb-5 bg-white relative" style="min-height:270px">
+            <div class="card-cursor" id="cursorRes"><svg viewBox="0 0 12 19" fill="none"><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" fill="#111"/><path d="M0 0v18l4.5-4.5L8 18l2.5-1.5L7 12l5.5-.5L0 0z" stroke="#fff" stroke-width="0.5"/></svg></div>
+            <div class="p-5 text-[12px]">
+              <div class="flex items-center gap-2.5 mb-3 text-black/25 text-[10px] uppercase tracking-widest font-semibold">
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <span>Resolution Agent</span>
+              </div>
+              <!-- Search bar -->
+              <div class="card-el rounded-lg px-3 py-2 bg-gray-50 border border-black/[0.05] mb-2.5 flex items-center gap-2" id="resSearch">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <span class="text-[10px] text-black/30"><span class="type-text" id="resSearchText">printer offline power issue</span></span>
+              </div>
+              <!-- KB Results -->
+              <div class="space-y-1.5 mb-2.5">
+                <div class="card-el flex items-center justify-between rounded-md px-2.5 py-1.5 border border-black/[0.04]" id="resKB1">
+                  <span class="text-[9px] text-black/45">TKT-3892 · Printer offline fix</span>
+                  <span class="text-[8px] text-emerald-600 font-medium">96%</span>
+                </div>
+                <div class="card-el flex items-center justify-between rounded-md px-2.5 py-1.5 border border-black/[0.04]" id="resKB2">
+                  <span class="text-[9px] text-black/45">KB-112 · Print spooler restart</span>
+                  <span class="text-[8px] text-emerald-600 font-medium">94%</span>
+                </div>
+                <div class="card-el flex items-center justify-between rounded-md px-2.5 py-1.5 border border-black/[0.04]" id="resKB3">
+                  <span class="text-[9px] text-black/45">TKT-3210 · HP LaserJet reset</span>
+                  <span class="text-[8px] text-black/25 font-medium">78%</span>
+                </div>
+              </div>
+              <!-- Auto-resolved -->
+              <div class="card-el rounded-lg px-3 py-2.5 bg-emerald-50 border border-emerald-200/40" id="resResolved">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-[9px] text-emerald-600 font-bold">AUTO-RESOLVED</div>
+                    <div class="text-[10px] text-black/45 mt-0.5">Restart print spooler via RMM</div>
+                  </div>
+                  <span class="text-[14px] font-bold text-emerald-600">94%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-[13px] text-black/25 font-semibold mb-2">03</div>
+          <h3 class="text-[17px] font-bold mb-2 leading-snug tracking-[-0.01em]">AI Resolution Planning</h3>
+          <p class="text-[15px] text-secondary-fg leading-[1.6]">RAG-powered solution retrieval from your ticket history and knowledge base documentation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MSP Integrations Section -->
+  <section class="py-14 cv-auto" id="mspIntegrations">
+    <div class="max-w-[1300px] mx-auto px-8">
+      <div class="integ-grid-wrap reveal-scale">
+      <div class="integ-grid">
+        <!-- Row 1: 4 logos -->
+        <div class="integ-cell" data-colors='["#1e3a5f","#3b82f6","#6366f1"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=connectwise.com&sz=128" alt="ConnectWise Manage">
+            <span class="logo-text">ConnectWise Manage</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#e63946","#c0392b","#457b9d"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-autotask.png" alt="Autotask PSA">
+            <span class="logo-text">Autotask PSA</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#3a86ff","#1a1a2e","#8338ec"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-kaseya.png" alt="Kaseya BMS">
+            <span class="logo-text">Kaseya BMS</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#dc2626","#991b1b","#fca5a5"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-halopsa.png" alt="HaloPSA">
+            <span class="logo-text">HaloPSA</span>
+          </div>
+        </div>
+
+        <!-- Row 2: logo + 2-cell title + logo -->
+        <div class="integ-cell" data-colors='["#7cb342","#558b2f","#aed581"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-cw-automate.png" alt="ConnectWise Automate">
+            <span class="logo-text">CW Automate</span>
+          </div>
+        </div>
+        <div class="integ-title-cell" style="grid-column: span 2; grid-row: span 2; flex-direction:column; gap:10px; padding:36px;">
+          <h2 class="text-[34px] md:text-[42px] font-bold text-slate-900 text-center leading-[1.15] tracking-[-0.03em]">Connect your existing<br>MSP stack</h2>
+          <p class="text-[14px] text-slate-400 text-center max-w-[280px]">Plug into the tools you already use.</p>
+        </div>
+        <div class="integ-cell" data-colors='["#2196f3","#1565c0","#90caf9"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-datto.png" alt="Datto RMM">
+            <span class="logo-text">Datto RMM</span>
+          </div>
+        </div>
+
+        <!-- Row 3: logo + (title continues) + logo -->
+        <div class="integ-cell" data-colors='["#1e88e5","#0d47a1","#64b5f6"]'>
+          <div class="integ-inner">
+            <img loading="lazy" src="logo-ninja.png" alt="NinjaRMM">
+            <span class="logo-text">NinjaRMM</span>
+          </div>
+        </div>
+        <!-- title cell spans from row 2 -->
+        <div class="integ-cell" data-colors='["#1a237e","#283593","#7986cb"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=itglue.com&sz=128" alt="IT Glue">
+            <span class="logo-text">IT Glue</span>
+          </div>
+        </div>
+
+        <!-- Row 4: 4 logos -->
+        <div class="integ-cell" data-colors='["#c77c1e","#8d5a0a","#f0c27f"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=liongard.com&sz=128" alt="Liongard">
+            <span class="logo-text">Liongard</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#10b981","#059669","#6ee7b7"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=rewst.io&sz=128" alt="Rewst">
+            <span class="logo-text">Rewst</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#6366f1","#4f46e5","#a5b4fc"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=slack.com&sz=128" alt="Slack">
+            <span class="logo-text">Slack</span>
+          </div>
+        </div>
+        <div class="integ-cell" data-colors='["#3b82f6","#2563eb","#93c5fd"]'>
+          <div class="integ-inner">
+            <img loading="lazy" decoding="async" src="https://www.google.com/s2/favicons?domain=teams.microsoft.com&sz=128" alt="Microsoft Teams">
+            <span class="logo-text">Microsoft Teams</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 01: AI Ticket Triage -->
+  <section class="py-16 cv-auto" id="triageSection">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="grid md:grid-cols-2 gap-14 items-center">
+        <div class="reveal-left">
+          <div class="section-label mb-4">01</div>
+          <h2 class="text-[38px] font-bold leading-[1.15] tracking-[-0.025em] mb-5 mobile-h2-sm">AI Ticket Triage</h2>
+          <p class="text-[16px] text-secondary-fg leading-[1.6] mb-6">
+            Every incoming ticket is instantly classified by type, urgency, and complexity using MSP best practices. No manual sorting — the AI reads the ticket, understands the issue, and categorizes it in seconds.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Auto-categorization</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Priority scoring</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Complexity analysis</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Confidence metrics</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">MSP best practices</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Sub-second processing</span>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="mock-embedded mock-fade rounded-2xl overflow-hidden text-[13px]">
+            <div class="flex bg-white rounded-2xl border border-black/[0.05]" style="min-height:520px">
+              <!-- Left sidebar -->
+              <div class="w-[50px] bg-[#f8f8fa] border-r border-black/[0.06] flex flex-col items-center py-4 gap-3 shrink-0 rounded-l-2xl">
+                <div class="w-6 h-6 rounded-lg bg-blue-500 flex items-center justify-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm5 10H7v-1c0-1.7 3.3-2.5 5-2.5s5 .8 5 2.5v1z"/></svg></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.04]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.04]"></div>
+              </div>
+              <!-- Left panel: ticket details -->
+              <div class="flex-1 border-r border-black/[0.06] p-5" style="max-width:55%">
+                <div class="flex items-center gap-2 mb-4 text-[11px] text-black/30">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                  <span>Inbox</span>
+                  <span>›</span>
+                  <span class="text-black/60 font-semibold">#4281</span>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/40 flex items-center justify-center mb-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="text-[11px] text-black/25 mb-1">#4281</div>
+                <div class="text-[15px] font-bold text-black/80 mb-2 leading-tight">Printer offline</div>
+                <div class="text-[11px] text-black/40 leading-relaxed mb-5">HP LaserJet in Suite 200 showing offline status. Multiple users unable to print since 9:15 AM.</div>
+                <div class="space-y-3 text-[11px]">
+                  <div class="flex justify-between"><span class="text-black/25">Category</span><span class="text-black/60 font-medium">Hardware → Printer</span></div>
+                  <div class="flex justify-between"><span class="text-black/25">Priority</span><div class="flex items-center gap-1"><span class="flex gap-[2px]"><span class="w-[2px] h-[7px] bg-orange-500 rounded-sm"></span><span class="w-[2px] h-[7px] bg-orange-500 rounded-sm"></span><span class="w-[2px] h-[7px] bg-orange-500 rounded-sm"></span></span><span class="text-black/60 font-medium">High</span></div></div>
+                  <div class="flex justify-between"><span class="text-black/25">Confidence</span><span class="text-blue-600 font-semibold">94%</span></div>
+                  <div class="flex justify-between"><span class="text-black/25">Status</span><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span class="text-black/60 font-medium">Triaging</span></div></div>
+                  <div class="flex justify-between"><span class="text-black/25">Source</span><span class="text-black/60 font-medium">Microsoft Teams</span></div>
+                  <div class="flex justify-between"><span class="text-black/25">Submitted</span><span class="text-black/60 font-medium">2 min ago</span></div>
+                </div>
+              </div>
+              <!-- Right panel: activity timeline -->
+              <div class="flex-1 p-5">
+                <div class="flex gap-2 mb-4">
+                  <span class="text-[11px] font-semibold text-black/70 border-b-2 border-blue-500 pb-1.5 px-1">Activity</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Context</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">History</span>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-blue-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Ticket received · 2 min ago</div><div class="text-[11px] text-black/55">New ticket from Sarah Mitchell via Teams: "Printer on 2nd floor is offline"</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-blue-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Classified · 2 min ago</div><div class="text-[11px] text-black/55 mb-2">AI identified category and priority from ticket content.</div><div class="flex flex-wrap gap-1.5"><span class="rounded-md px-2 py-0.5 text-[9px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40">Hardware</span><span class="text-[9px] text-black/15">→</span><span class="rounded-md px-2 py-0.5 text-[9px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40">Printer</span><span class="text-[9px] text-black/15">→</span><span class="rounded-md px-2 py-0.5 text-[9px] font-medium bg-blue-50 text-blue-600 border border-blue-200/40">Power Issue</span></div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Priority assigned · 2 min ago</div><div class="text-[11px] text-black/55">Set to <span class="font-semibold text-orange-600">High</span> — multiple users affected, hardware failure suspected.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-violet-400 mt-1 shrink-0"></div></div>
+                    <div><div class="text-[10px] text-black/25 mb-1">Confidence score · 2 min ago</div><div class="text-[11px] text-black/55">Triage confidence: <span class="font-bold text-blue-600">94%</span> — passing to Dispatch Agent.</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02: AI Smart Dispatch -->
+  <section class="py-16 cv-auto" id="dispatchSection">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="grid md:grid-cols-2 gap-14 items-center">
+        <div class="order-2 md:order-1 reveal-left">
+          <div class="mock-embedded mock-fade rounded-2xl overflow-hidden text-[13px]">
+            <div class="flex bg-white rounded-2xl border border-black/[0.05]" style="min-height:520px">
+              <!-- Left sidebar -->
+              <div class="w-[50px] bg-[#f8f8fa] border-r border-black/[0.06] flex flex-col items-center py-4 gap-3 shrink-0 rounded-l-2xl">
+                <div class="w-6 h-6 rounded-lg bg-amber-500 flex items-center justify-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.04]"></div>
+              </div>
+              <!-- Left panel: ticket + matching -->
+              <div class="flex-1 border-r border-black/[0.06] p-5" style="max-width:55%">
+                <div class="flex items-center gap-2 mb-4 text-[11px] text-black/30">
+                  <span>Dispatch</span><span>›</span><span class="text-black/60 font-semibold">#4281</span>
+                </div>
+                <div class="rounded-xl px-3.5 py-3 bg-blue-50/50 border border-blue-200/30 mb-5 flex items-center gap-2.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <div><div class="text-[9px] text-black/25">From Triage</div><div class="text-[11px] font-semibold text-black/60">Hardware → Printer → High</div></div>
+                </div>
+                <div class="text-[9px] text-black/25 uppercase tracking-wider font-semibold mb-3">Technician Matching</div>
+                <div class="space-y-2.5">
+                  <div class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 bg-amber-50/60 border border-amber-200/50">
+                    <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=68" alt="" class="w-8 h-8 rounded-full object-cover shrink-0">
+                    <div class="flex-1 min-w-0"><div class="text-[11px] font-semibold text-black/70">John Doe</div><div class="text-[9px] text-black/30">Printer specialist</div></div>
+                    <div class="text-right"><div class="text-[9px] font-semibold text-amber-600">98%</div><div class="text-[8px] text-black/20">2 queue</div></div>
+                  </div>
+                  <div class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 border border-black/[0.05]">
+                    <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=47" alt="" class="w-8 h-8 rounded-full object-cover shrink-0">
+                    <div class="flex-1 min-w-0"><div class="text-[11px] font-semibold text-black/70">Sarah Chen</div><div class="text-[9px] text-black/30">Network admin</div></div>
+                    <div class="text-right"><div class="text-[9px] text-black/30">72%</div><div class="text-[8px] text-black/20">5 queue</div></div>
+                  </div>
+                  <div class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 border border-black/[0.05] opacity-40">
+                    <img loading="lazy" decoding="async" src="https://i.pravatar.cc/48?img=59" alt="" class="w-8 h-8 rounded-full object-cover shrink-0">
+                    <div class="flex-1 min-w-0"><div class="text-[11px] font-semibold text-black/70">Mike Torres</div><div class="text-[9px] text-black/30">General support</div></div>
+                    <div class="text-right"><div class="text-[9px] text-black/30">65%</div><div class="text-[8px] text-red-400">Off shift</div></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Right panel: activity -->
+              <div class="flex-1 p-5">
+                <div class="flex gap-2 mb-4">
+                  <span class="text-[11px] font-semibold text-black/70 border-b-2 border-amber-500 pb-1.5 px-1">Activity</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Skills</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Schedule</span>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-amber-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Received from Triage · 1 min ago</div><div class="text-[11px] text-black/55">Ticket #4281 classified as Hardware → Printer, High Priority.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-amber-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Scanning technicians · 1 min ago</div><div class="text-[11px] text-black/55">Evaluated 3 techs by skill match, workload, and shift status.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Best match found · 1 min ago</div><div class="text-[11px] text-black/55">John Doe — <span class="font-semibold text-amber-600">98% match</span>. Printer specialist, 2 tickets in queue.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div></div>
+                    <div><div class="text-[10px] text-black/25 mb-1">Assigned · just now</div><div class="rounded-lg px-2.5 py-1.5 bg-amber-50 border border-amber-200/40 text-[11px]"><span class="font-semibold text-amber-700">Assigned to John Doe</span> <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="3" stroke-linecap="round" class="inline"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 md:order-2 reveal-right">
+          <div class="section-label mb-4">02</div>
+          <h2 class="text-[38px] font-bold leading-[1.15] tracking-[-0.025em] mb-5 mobile-h2-sm">AI Smart Dispatch</h2>
+          <p class="text-[16px] text-secondary-fg leading-[1.6] mb-6">
+            Tickets are automatically routed to the best available technician based on skill match, current workload, shift availability, and historical performance. The right tech gets the right ticket every time.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Skill-based matching</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Workload balancing</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Shift awareness</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Match confidence %</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Queue optimization</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Instant assignment</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03: AI Self-Service -->
+  <section class="py-16 cv-auto" id="selfServiceSection">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="grid md:grid-cols-2 gap-14 items-center">
+        <div class="reveal-left">
+          <div class="section-label mb-4">03</div>
+          <h2 class="text-[38px] font-bold leading-[1.15] tracking-[-0.025em] mb-5 mobile-h2-sm">AI Self-Service</h2>
+          <p class="text-[16px] text-secondary-fg leading-[1.6] mb-6">
+            The AI engages end users directly with intelligent follow-up questions to gather diagnostic context — device info, symptoms, environment details — before a technician even sees the ticket.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Guided diagnostics</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Context collection</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Smart follow-ups</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Environment detection</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Symptom analysis</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Escalation triggers</span>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="mock-embedded mock-fade rounded-2xl overflow-hidden text-[13px]">
+            <div class="flex bg-white rounded-2xl border border-black/[0.05]" style="min-height:520px">
+              <!-- Left sidebar -->
+              <div class="w-[50px] bg-[#f8f8fa] border-r border-black/[0.06] flex flex-col items-center py-4 gap-3 shrink-0 rounded-l-2xl">
+                <div class="w-6 h-6 rounded-lg bg-violet-500 flex items-center justify-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.04]"></div>
+              </div>
+              <!-- Left panel: ticket context -->
+              <div class="flex-1 border-r border-black/[0.06] p-5" style="max-width:45%">
+                <div class="flex items-center gap-2 mb-4 text-[11px] text-black/30">
+                  <span>Self-Service</span><span>›</span><span class="text-black/60 font-semibold">#4281</span>
+                </div>
+                <div class="text-[9px] text-black/25 uppercase tracking-wider font-semibold mb-3">Data Collected</div>
+                <div class="space-y-2.5 text-[11px]">
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Location</div><div class="text-black/55">2nd floor, Suite 200</div></div>
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Indicator lights</div><div class="text-black/55">None — completely dead</div></div>
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Power cable</div><div class="text-black/55">Checked, plugged in</div></div>
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Alternate outlet</div><div class="text-black/55">Tried — still dead</div></div>
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Users affected</div><div class="text-black/55">Multiple (floor-wide)</div></div>
+                  <div class="rounded-lg px-3 py-2 bg-violet-50/50 border border-violet-200/30"><div class="text-[9px] text-violet-400 mb-0.5">Duration</div><div class="text-black/55">Since 9:15 AM</div></div>
+                </div>
+              </div>
+              <!-- Right panel: chat -->
+              <div class="flex-1 p-5">
+                <div class="flex gap-2 mb-4">
+                  <span class="text-[11px] font-semibold text-black/70 border-b-2 border-violet-500 pb-1.5 px-1">Chat</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Context</span>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex gap-2">
+                    <div class="w-5 h-5 rounded-full bg-violet-100 border border-violet-200/50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-[6px] text-violet-500 font-bold">AI</span></div>
+                    <div class="bg-violet-50/60 rounded-lg rounded-tl-sm px-2.5 py-1.5 text-[10px] text-black/55 border border-violet-200/30">Which floor is the printer on?</div>
+                  </div>
+                  <div class="flex justify-end"><div class="bg-gray-100 rounded-lg rounded-tr-sm px-2.5 py-1.5 text-[10px] text-black/55">2nd floor, Suite 200</div></div>
+                  <div class="flex gap-2">
+                    <div class="w-5 h-5 rounded-full bg-violet-100 border border-violet-200/50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-[6px] text-violet-500 font-bold">AI</span></div>
+                    <div class="bg-violet-50/60 rounded-lg rounded-tl-sm px-2.5 py-1.5 text-[10px] text-black/55 border border-violet-200/30">Any indicator lights on the panel?</div>
+                  </div>
+                  <div class="flex justify-end"><div class="bg-gray-100 rounded-lg rounded-tr-sm px-2.5 py-1.5 text-[10px] text-black/55">No, completely dead</div></div>
+                  <div class="flex gap-2">
+                    <div class="w-5 h-5 rounded-full bg-violet-100 border border-violet-200/50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-[6px] text-violet-500 font-bold">AI</span></div>
+                    <div class="bg-violet-50/60 rounded-lg rounded-tl-sm px-2.5 py-1.5 text-[10px] text-black/55 border border-violet-200/30">Is the power cable secure?</div>
+                  </div>
+                  <div class="flex justify-end"><div class="bg-gray-100 rounded-lg rounded-tr-sm px-2.5 py-1.5 text-[10px] text-black/55">Yes, tried another outlet too</div></div>
+                </div>
+                <div class="mt-3 rounded-lg px-2.5 py-1.5 bg-violet-50 border border-violet-200/40 text-center">
+                  <span class="text-[9px] font-semibold text-violet-600">&#10003; 6 data points · Escalating</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 04: AI Resolution Planning -->
+  <section class="py-16 cv-auto" id="resolutionSection">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="grid md:grid-cols-2 gap-14 items-center">
+        <div class="order-2 md:order-1 reveal-left">
+          <div class="mock-embedded mock-fade rounded-2xl overflow-hidden text-[13px]">
+            <div class="flex bg-white rounded-2xl border border-black/[0.05]" style="min-height:560px">
+              <!-- Left sidebar -->
+              <div class="w-[50px] bg-[#f8f8fa] border-r border-black/[0.06] flex flex-col items-center py-4 gap-3 shrink-0 rounded-l-2xl">
+                <div class="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.06]"></div>
+                <div class="w-5 h-5 rounded bg-black/[0.04]"></div>
+              </div>
+              <!-- Left panel: KB search -->
+              <div class="flex-1 border-r border-black/[0.06] p-5" style="max-width:55%">
+                <div class="flex items-center gap-2 mb-4 text-[11px] text-black/30">
+                  <span>Resolution</span><span>›</span><span class="text-black/60 font-semibold">#4281</span>
+                </div>
+                <div class="rounded-lg px-3 py-2 bg-gray-50 border border-black/[0.05] mb-4 flex items-center gap-2">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  <span class="text-[10px] text-black/35">printer offline power issue</span>
+                </div>
+                <div class="text-[9px] text-black/25 uppercase tracking-wider font-semibold mb-2.5">KB Matches</div>
+                <div class="space-y-1.5 mb-5">
+                  <div class="flex items-center justify-between rounded-lg px-3 py-2 bg-emerald-50/50 border border-emerald-200/30">
+                    <div><div class="text-[10px] text-black/55 font-medium">TKT-3892 · Printer offline fix</div><div class="text-[8px] text-black/20 mt-0.5">3 days ago · Same model</div></div>
+                    <span class="text-[10px] text-emerald-600 font-bold">96%</span>
+                  </div>
+                  <div class="flex items-center justify-between rounded-lg px-3 py-2 border border-black/[0.04]">
+                    <div><div class="text-[10px] text-black/55 font-medium">KB-112 · Spooler restart</div><div class="text-[8px] text-black/20 mt-0.5">Updated 2 weeks ago</div></div>
+                    <span class="text-[10px] text-emerald-600 font-semibold">94%</span>
+                  </div>
+                  <div class="flex items-center justify-between rounded-lg px-3 py-2 border border-black/[0.04] opacity-50">
+                    <div><div class="text-[10px] text-black/55 font-medium">TKT-3210 · HP LaserJet reset</div><div class="text-[8px] text-black/20 mt-0.5">2 weeks ago · Diff model</div></div>
+                    <span class="text-[10px] text-black/30 font-semibold">78%</span>
+                  </div>
+                </div>
+                <div class="text-[9px] text-black/25 uppercase tracking-wider font-semibold mb-2.5">Resolution Plan</div>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-[10px]"><div class="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-black/50">Restart print spooler via RMM</span></div>
+                  <div class="flex items-center gap-2 text-[10px]"><div class="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-black/50">Verify printer responds to ping</span></div>
+                  <div class="flex items-center gap-2 text-[10px]"><div class="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-black/50">Send test print to confirm</span></div>
+                </div>
+              </div>
+              <!-- Right panel: activity timeline -->
+              <div class="flex-1 p-5">
+                <div class="flex gap-2 mb-4">
+                  <span class="text-[11px] font-semibold text-black/70 border-b-2 border-emerald-500 pb-1.5 px-1">Activity</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Evidence</span>
+                  <span class="text-[11px] text-black/25 pb-1.5 px-1">Logs</span>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">KB search · 30s ago</div><div class="text-[11px] text-black/55">Found 3 matching entries. Top match: TKT-3892 at <span class="font-semibold text-emerald-600">96%</span></div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Plan generated · 25s ago</div><div class="text-[11px] text-black/55">3-step resolution based on TKT-3892 and KB-112.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-blue-500 mt-1 shrink-0"></div><div class="w-[1px] flex-1 bg-black/[0.06]"></div></div>
+                    <div class="pb-3"><div class="text-[10px] text-black/25 mb-1">Executing via RMM · 15s ago</div><div class="text-[11px] text-black/55">Restarting print spooler on PRINTER-S200 via ConnectWise Automate.</div></div>
+                  </div>
+                  <div class="flex gap-2.5">
+                    <div class="flex flex-col items-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div></div>
+                    <div><div class="text-[10px] text-black/25 mb-1">Resolved · just now</div><div class="rounded-lg px-2.5 py-2 bg-emerald-50 border border-emerald-200/40"><div class="flex items-center justify-between"><div><div class="text-[9px] text-emerald-600 font-bold">AUTO-RESOLVED</div><div class="text-[10px] text-black/40 mt-0.5">Printer online · Ticket closed</div></div><div class="text-right"><span class="text-[14px] font-bold text-emerald-600">94%</span><div class="text-[8px] text-emerald-500">47s</div></div></div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 md:order-2 reveal-right">
+          <div class="section-label mb-4">04</div>
+          <h2 class="text-[38px] font-bold leading-[1.15] tracking-[-0.025em] mb-5 mobile-h2-sm">AI Resolution Planning</h2>
+          <p class="text-[16px] text-secondary-fg leading-[1.6] mb-6">
+            RAG-powered solution retrieval that searches your entire ticket history and knowledge base to find the best resolution. When confidence is high enough, the AI executes the fix automatically via your RMM tools.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Knowledge base search</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Historical matching</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Confidence scoring</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Remote remediation</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Step-by-step plans</span>
+            <span class="px-3 py-1.5 rounded-full bg-black/[0.03] border border-black/[0.06] text-[12px] font-medium text-secondary-fg">Auto-close on success</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Under the Hood — Architecture Flow -->
+  <style>
+    .arch-node {
+      opacity: 0;
+      transform: translateY(16px) scale(0.9);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .arch-node.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .arch-connector {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .arch-connector.active {
+      stroke-dashoffset: 0;
+    }
+    .arch-vline {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    .arch-vline.active {
+      stroke-dashoffset: 0;
+    }
+    .arch-layer {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .arch-layer.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .arch-pulse {
+      r: 4;
+      opacity: 0;
+    }
+    .arch-pulse.active {
+      animation: archPulseMove 1.4s cubic-bezier(0.22,0.61,0.36,1) forwards;
+    }
+    @keyframes archPulseMove {
+      0% { opacity: 1; offset-distance: 0%; }
+      80% { opacity: 1; }
+      100% { opacity: 0; offset-distance: 100%; }
+    }
+    .arch-icon-wrap {
+      position: relative;
+    }
+    .arch-icon-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 18px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .arch-node.active .arch-icon-wrap::after {
+      animation: archRing 1.2s ease forwards;
+    }
+    @keyframes archRing {
+      0% { box-shadow: 0 0 0 0 currentColor; opacity: 0.3; }
+      100% { box-shadow: 0 0 0 10px currentColor; opacity: 0; }
+    }
+  </style>
+  <section class="py-20 border-t border-border-default overflow-hidden cv-auto">
+    <div class="max-w-[1100px] mx-auto px-8">
+      <div class="text-center mb-14 reveal">
+        <div class="tag-label text-tertiary-fg mb-4">UNDER THE HOOD</div>
+        <h2 class="text-[40px] font-bold leading-[1.15] tracking-[-0.025em] mb-4 mobile-h2-sm">
+          How it all connects
+        </h2>
+        <p class="text-[15px] text-secondary-fg max-w-[520px] mx-auto">Four specialized agents working together through a shared intelligence layer</p>
+      </div>
+
+      <div class="relative" id="archDiagram">
+        <!-- Agent flow row -->
+        <div class="flex items-start justify-between relative z-10 mb-4" id="archNodes">
+          <!-- Triage -->
+          <div class="arch-node text-center flex-1" data-delay="0">
+            <div class="arch-icon-wrap mx-auto w-[60px] h-[60px] rounded-[18px] bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-500/25" style="color: rgba(59,130,246,0.4)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" rx="2"/><path d="M9 9h6M9 13h4"/><circle cx="17" cy="17" r="0" fill="white"><animate attributeName="r" values="0;2;0" dur="2s" repeatCount="indefinite" begin="1s"/></circle></svg>
+            </div>
+            <div class="text-[14px] font-bold text-primary-fg mb-0.5">Triage</div>
+            <div class="text-[11px] text-tertiary-fg">Classify & prioritize</div>
+          </div>
+
+          <!-- Connector 1 -->
+          <div class="flex-1 flex items-center justify-center pt-[26px]">
+            <svg width="100%" height="20" viewBox="0 0 120 20" preserveAspectRatio="xMidYMid meet">
+              <line class="arch-connector" data-delay="300" x1="0" y1="10" x2="105" y2="10" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+              <polygon points="105,5 115,10 105,15" fill="rgba(0,0,0,0.12)" class="arch-node" data-delay="500"/>
+            </svg>
+          </div>
+
+          <!-- Dispatch -->
+          <div class="arch-node text-center flex-1" data-delay="400">
+            <div class="arch-icon-wrap mx-auto w-[60px] h-[60px] rounded-[18px] bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center mb-3 shadow-lg shadow-amber-500/25" style="color: rgba(245,158,11,0.4)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+            </div>
+            <div class="text-[14px] font-bold text-primary-fg mb-0.5">Dispatch</div>
+            <div class="text-[11px] text-tertiary-fg">Match & assign</div>
+          </div>
+
+          <!-- Connector 2 -->
+          <div class="flex-1 flex items-center justify-center pt-[26px]">
+            <svg width="100%" height="20" viewBox="0 0 120 20" preserveAspectRatio="xMidYMid meet">
+              <line class="arch-connector" data-delay="700" x1="0" y1="10" x2="105" y2="10" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+              <polygon points="105,5 115,10 105,15" fill="rgba(0,0,0,0.12)" class="arch-node" data-delay="900"/>
+            </svg>
+          </div>
+
+          <!-- Self-Service -->
+          <div class="arch-node text-center flex-1" data-delay="800">
+            <div class="arch-icon-wrap mx-auto w-[60px] h-[60px] rounded-[18px] bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center mb-3 shadow-lg shadow-violet-500/25" style="color: rgba(139,92,246,0.4)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>
+            </div>
+            <div class="text-[14px] font-bold text-primary-fg mb-0.5">Self-Service</div>
+            <div class="text-[11px] text-tertiary-fg">Diagnose & collect</div>
+          </div>
+
+          <!-- Connector 3 -->
+          <div class="flex-1 flex items-center justify-center pt-[26px]">
+            <svg width="100%" height="20" viewBox="0 0 120 20" preserveAspectRatio="xMidYMid meet">
+              <line class="arch-connector" data-delay="1100" x1="0" y1="10" x2="105" y2="10" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+              <polygon points="105,5 115,10 105,15" fill="rgba(0,0,0,0.12)" class="arch-node" data-delay="1300"/>
+            </svg>
+          </div>
+
+          <!-- Resolution -->
+          <div class="arch-node text-center flex-1" data-delay="1200">
+            <div class="arch-icon-wrap mx-auto w-[60px] h-[60px] rounded-[18px] bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-3 shadow-lg shadow-emerald-500/25" style="color: rgba(16,185,129,0.4)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="text-[14px] font-bold text-primary-fg mb-0.5">Resolution</div>
+            <div class="text-[11px] text-tertiary-fg">Solve & verify</div>
+          </div>
+        </div>
+
+        <!-- Vertical connectors -->
+        <div class="flex justify-between px-[7%] mb-0 relative z-0" style="margin-top:-2px;">
+          <svg width="2" height="40"><line class="arch-vline" data-delay="1500" x1="1" y1="0" x2="1" y2="40" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/></svg>
+          <svg width="2" height="40"><line class="arch-vline" data-delay="1600" x1="1" y1="0" x2="1" y2="40" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/></svg>
+          <svg width="2" height="40"><line class="arch-vline" data-delay="1700" x1="1" y1="0" x2="1" y2="40" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/></svg>
+          <svg width="2" height="40"><line class="arch-vline" data-delay="1800" x1="1" y1="0" x2="1" y2="40" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/></svg>
+        </div>
+
+        <!-- Shared intelligence layer -->
+        <div class="arch-layer rounded-2xl border border-black/[0.06] bg-white p-6 relative z-10" data-delay="1900" id="archLayer">
+          <div class="text-center mb-5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/[0.03] border border-black/[0.06]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-[10px] font-semibold tracking-[0.12em] uppercase text-tertiary-fg">Shared Intelligence Layer</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <!-- RAG -->
+            <div class="rounded-xl bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/50 p-5 hover:shadow-md hover:shadow-blue-100/40 transition-shadow duration-300">
+              <div class="flex items-center gap-2.5 mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m9 10 2 2 4-4"/></svg>
+                </div>
+                <div class="text-[13px] font-bold text-primary-fg">Agentic RAG</div>
+              </div>
+              <p class="text-[11px] text-secondary-fg leading-[1.55]">Retrieves and synthesizes context from ticket history, knowledge base, and documentation in real-time.</p>
+            </div>
+            <!-- MCP -->
+            <div class="rounded-xl bg-gradient-to-br from-violet-50/80 to-purple-50/40 border border-violet-100/50 p-5 hover:shadow-md hover:shadow-violet-100/40 transition-shadow duration-300">
+              <div class="flex items-center gap-2.5 mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7zM14 14h3v3h-3z"/><path d="M10 8.5h4M8.5 10v4M15.5 10v4M10 15.5h4"/></svg>
+                </div>
+                <div class="text-[13px] font-bold text-primary-fg">MCP Protocol</div>
+              </div>
+              <p class="text-[11px] text-secondary-fg leading-[1.55]">Unified context protocol connecting agents to LLMs, tools, and external services through one interface.</p>
+            </div>
+            <!-- A2A -->
+            <div class="rounded-xl bg-gradient-to-br from-emerald-50/80 to-teal-50/40 border border-emerald-100/50 p-5 hover:shadow-md hover:shadow-emerald-100/40 transition-shadow duration-300">
+              <div class="flex items-center gap-2.5 mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/><path d="M16 6l2 2-2 2"/><path d="M16 12l2 2-2 2"/></svg>
+                </div>
+                <div class="text-[13px] font-bold text-primary-fg">Google A2A</div>
+              </div>
+              <p class="text-[11px] text-secondary-fg leading-[1.55]">Agent-to-Agent handoff protocol for seamless collaboration and state sharing between all four agents.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-32 bg-page relative overflow-hidden cv-auto">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div class="w-[900px] h-[550px] opacity-[0.28]" style="background: radial-gradient(ellipse 70% 60% at 35% 45%, rgba(30,64,175,0.8) 0%, rgba(37,99,235,0.35) 40%, transparent 70%), radial-gradient(ellipse 50% 55% at 75% 45%, rgba(220,38,38,0.45) 0%, transparent 65%); filter: blur(60px);"></div>
+    </div>
+    <div class="max-w-[1600px] mx-auto px-8 text-center relative z-10 reveal">
+      <h2 class="text-[54px] font-bold leading-[1.08] tracking-[-0.03em] mb-5 text-primary-fg">
+        Ready for <span class="font-serif-accent italic text-[60px]">agentic</span> AI?
+      </h2>
+      <p class="text-[17px] text-secondary-fg mb-3 max-w-[540px] mx-auto font-medium">Join forward-thinking MSPs leveraging multi-agent AI systems</p>
+      <p class="text-[15px] text-tertiary-fg mb-9 max-w-[480px] mx-auto">Not sure where to start? Take our free assessment to see how AI-ready your MSP operations are.</p>
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a href="https://meetings.hubspot.com/ai-autopilot" class="btn-slide btn-slide-lg bg-brand text-white text-[16px] font-bold shadow-lg">
+              <span class="btn-text">Schedule a Demo</span>
+              <div class="btn-icon bg-white">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.5 2.5L10 13.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21.5 2.5L15 21.5L10 13.5L2.5 10.5L21.5 2.5Z" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M10 13.5L15 21.5" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </a>
+        <a href="https://mspagentic.ai/" target="_blank" class="btn-flip group relative inline-flex h-[52px] items-center justify-center overflow-hidden rounded-full border border-border-strong text-[16px] font-bold">
+              <div class="inline-flex h-[52px] translate-y-0 items-center justify-center px-8 text-primary-fg transition duration-500 group-hover:-translate-y-[150%]">
+                Free AI Readiness Assessment
+              </div>
+              <div class="absolute inline-flex h-[52px] w-full translate-y-[100%] items-center justify-center text-white transition duration-500 group-hover:translate-y-0">
+                <span class="absolute inset-0 translate-y-full skew-y-6 bg-brand transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0"></span>
+                <span class="z-10">Free AI Readiness Assessment</span>
+              </div>
+            </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-border-default py-14">
+    <div class="max-w-[1600px] mx-auto px-8">
+      <div class="flex items-center justify-between mb-10 pb-8 border-b border-border-subtle">
+        <div class="flex items-center gap-6">
+          <a href="#" class="flex items-center gap-2">
+            <img src="favicon.png" alt="AI Autopilot" class="w-6 h-6 rounded-lg">
+            <span class="font-bold text-[14px]"><span class="text-brand-dark">AI Autop</span><span class="text-brand-accent">i</span><span class="text-brand-dark">lo</span><span class="text-brand-accent">t</span></span>
+          </a>
+          <span class="text-[13px] text-secondary-fg">© 2025 AI Autopilot, Inc.</span>
+        </div>
+        <a href="#" class="text-[13px] text-brand font-semibold flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+          All systems operational
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-10">
+        <div>
+          <div class="text-[13px] font-bold mb-4 text-primary-fg/60 uppercase tracking-wide">Product</div>
+          <div class="space-y-2.5">
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Ticket Triage</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Smart Dispatch</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Resolution Planning</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Self-Service</a>
+          </div>
+        </div>
+        <div>
+          <div class="text-[13px] font-bold mb-4 text-primary-fg/60 uppercase tracking-wide">Integrations</div>
+          <div class="space-y-2.5">
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">ConnectWise</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Autotask</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Halo PSA</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">IT Glue</a>
+          </div>
+        </div>
+        <div>
+          <div class="text-[13px] font-bold mb-4 text-primary-fg/60 uppercase tracking-wide">Resources</div>
+          <div class="space-y-2.5">
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Documentation</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Blog</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Changelog</a>
+          </div>
+        </div>
+        <div>
+          <div class="text-[13px] font-bold mb-4 text-primary-fg/60 uppercase tracking-wide">Company</div>
+          <div class="space-y-2.5">
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">About</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Careers</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div class="text-[13px] font-bold mb-4 text-primary-fg/60 uppercase tracking-wide">Legal</div>
+          <div class="space-y-2.5">
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Privacy Policy</a>
+            <a href="#" class="block text-[13px] text-tertiary-fg hover:text-secondary-fg transition">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 pt-6 border-t border-border-subtle">
+        <p class="text-[12px] text-tertiary-fg">© 2025 AI Autopilot, Inc. All Rights Reserved. Built by MSPs, for MSPs.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll to top on refresh
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
+    // Combined scroll handler — navbar + parallax in one rAF
+    const header = document.getElementById('mainHeader');
+    const heroEl = document.querySelector('.gradient-hero');
+    const mockupEl = document.querySelector('.hero-gradient-bg');
+    const heroBottom = heroEl ? heroEl.offsetTop + heroEl.offsetHeight : 0;
+    let isFloating = false;
+    let scrollTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          if (!isFloating && y > 100) {
+            header.classList.add('floating');
+            isFloating = true;
+          } else if (isFloating && y < 40) {
+            header.classList.remove('floating');
+            isFloating = false;
+          }
+          if (mockupEl && y < heroBottom) {
+            mockupEl.style.transform = `translate3d(0,${y * 0.08}px,0)`;
+          }
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.body.classList.remove('page-loading');
+        document.body.classList.add('page-revealed');
+        const overlay = document.querySelector('.page-reveal-overlay');
+        if (overlay) {
+          overlay.classList.add('fade-out');
+          overlay.addEventListener('transitionend', () => overlay.remove());
+        }
+      }, 80);
+
+      // Synced plane + trail animation
+      (function() {
+        const trail = document.querySelector('.trail-path');
+        const plane = document.querySelector('.plane-icon');
+        if (!trail || !plane) return;
+        const totalLen = trail.getTotalLength();
+        trail.style.setProperty('--trail-len', totalLen);
+        trail.style.strokeDasharray = totalLen;
+        trail.style.strokeDashoffset = totalLen;
+        const delay = 900;
+        const duration = 2800;
+        const trailLag = 0.08;
+        function ease(t) {
+          if (t < 0.5) return 2 * t * t;
+          return -1 + (4 - 2 * t) * t;
+        }
+        let start = null;
+        function tick(ts) {
+          if (!start) start = ts;
+          const elapsed = ts - start - delay;
+          if (elapsed < 0) { requestAnimationFrame(tick); return; }
+          const rawT = Math.min(elapsed / duration, 1);
+          const planeT = ease(rawT);
+          const trailT = ease(Math.max(0, Math.min((elapsed - duration * trailLag) / duration, 1)));
+          plane.style.offsetDistance = (planeT * 100) + '%';
+          plane.style.opacity = rawT > 0.01 ? 1 : 0;
+          trail.style.strokeDashoffset = totalLen * (1 - trailT);
+          if (rawT < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      })();
+
+      // Cinematic product demo
+      const s1Chat = document.getElementById('s1Chat');
+      const s1Input = document.getElementById('s1Input');
+      const s1Categories = document.getElementById('s1Categories');
+      const s1Welcome = document.getElementById('s1Welcome');
+      const s1InitialView = document.getElementById('s1InitialView');
+      const s1OpenBtn = document.getElementById('s1OpenBtn');
+      const scene1 = document.getElementById('scene1');
+      const scene2 = document.getElementById('scene2');
+      const s2Agents = document.getElementById('s2Agents');
+      const demoCursor = document.getElementById('demoCursor');
+      const viewport = document.querySelector('.cinema-viewport');
+      if (!s1Chat) return;
+
+      function showScene(n) {
+        [scene1, scene2].forEach(s => s.classList.remove('active'));
+        [scene1, scene2][n - 1].classList.add('active');
+      }
+
+      function zoomTo(scene, scale, originX, originY) {
+        scene.style.transformOrigin = `${originX}% ${originY}%`;
+        scene.style.transform = `scale(${scale})`;
+      }
+
+      function addMsg(container, html, side) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg flex ' + (side === 'right' ? 'justify-end' : 'justify-start');
+        const bg = side === 'right' ? 'bg-gray-100 rounded-2xl rounded-br-md text-black/80' : 'bg-brand text-white rounded-2xl rounded-bl-md';
+        div.innerHTML = `<div class="${bg} px-3.5 py-2 max-w-[400px] text-[11px] leading-[1.55]">${html}</div>`;
+        container.appendChild(div);
+        requestAnimationFrame(() => requestAnimationFrame(() => div.classList.add('visible')));
+        return div;
+      }
+
+      function addTypingIndicator(container) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg flex justify-start';
+        div.innerHTML = `<div class="bg-brand text-white rounded-2xl rounded-bl-md"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+        container.appendChild(div);
+        requestAnimationFrame(() => requestAnimationFrame(() => div.classList.add('visible')));
+        return div;
+      }
+
+      function typeIn(el, text, duration) {
+        return new Promise(resolve => {
+          let i = 0;
+          el.classList.add('typing-cursor');
+          el.textContent = '';
+          const interval = setInterval(() => {
+            i++;
+            el.textContent = text.substring(0, i);
+            if (i >= text.length) { clearInterval(interval); el.classList.remove('typing-cursor'); resolve(); }
+          }, duration / text.length);
+        });
+      }
+
+      function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+      function moveCursor(el) {
+        const vr = viewport.getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        demoCursor.style.left = (er.left - vr.left + er.width / 2) + 'px';
+        demoCursor.style.top = (er.top - vr.top + er.height / 2) + 'px';
+      }
+
+      function cursorClick() {
+        demoCursor.classList.add('clicking');
+        setTimeout(() => demoCursor.classList.remove('clicking'), 200);
+      }
+
+      function revealField(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }
+
+      async function runDemo() {
+        // Reset everything
+        s1Chat.innerHTML = '';
+        s1Chat.style.display = 'none';
+        s1InitialView.style.display = 'flex';
+        s1Input.textContent = 'Describe your issue...';
+        s1Categories.style.opacity = '1';
+        s1Welcome.style.opacity = '1';
+        s1OpenBtn.style.transform = '';
+        demoCursor.style.display = 'none';
+        scene1.style.transition = 'none';
+        scene2.style.transition = 'none';
+        zoomTo(scene1, 1, 50, 50);
+        zoomTo(scene2, 1, 50, 50);
+        showScene(1);
+        s2Agents.querySelectorAll('.agent-entry').forEach(e => e.classList.remove('visible'));
+        document.querySelectorAll('.s2-field').forEach(f => { f.style.opacity = '0'; f.style.transform = 'translateY(4px)'; });
+        const s2Res = document.getElementById('s2Resolution');
+        s2Res.style.opacity = '0'; s2Res.style.transform = 'translateY(4px)';
+        void scene1.offsetHeight;
+        const tn = 'opacity 0.8s ease, transform 1.6s cubic-bezier(0.22, 0.61, 0.36, 1), transform-origin 1.6s cubic-bezier(0.22, 0.61, 0.36, 1)';
+        scene1.style.transition = tn;
+        scene2.style.transition = tn;
+
+        await wait(1500);
+
+        // Show cursor and move to input
+        demoCursor.style.display = 'block';
+        demoCursor.style.left = '70%';
+        demoCursor.style.top = '60%';
+        await wait(300);
+
+        // Camera pushes toward the input bar
+        zoomTo(scene1, 1.35, 55, 48);
+        moveCursor(s1Input);
+        await wait(1400);
+
+        // Click on input
+        cursorClick();
+        await wait(400);
+
+        // Type while zoomed on the input
+        await typeIn(s1Input, 'My printer is not working or turning on', 1600);
+        await wait(600);
+
+        // Cursor moves to Open Ticket button
+        moveCursor(s1OpenBtn);
+        await wait(1000);
+
+        // Click Open Ticket — chat starts immediately
+        cursorClick();
+        s1OpenBtn.style.transform = 'scale(0.92)';
+        await wait(150);
+        s1OpenBtn.style.transform = '';
+        demoCursor.style.display = 'none';
+
+        // Instantly switch to chat — one smooth zoom drift for the whole conversation
+        s1InitialView.style.display = 'none';
+        s1Chat.style.display = 'flex';
+        zoomTo(scene1, 1.12, 50, 48);
+
+        // User message
+        addMsg(s1Chat, 'My printer is not working or turning on', 'right');
+        await wait(1000);
+
+        // AI typing indicator → response
+        let typing = addTypingIndicator(s1Chat);
+        await wait(1200);
+        typing.remove();
+        addMsg(s1Chat, 'I\'d be happy to help! To better understand your printer issue:<br><br>• How many users are affected?<br>• Can you see any lights on the printer?<br>• Is it connected via USB, network, or wireless?', 'left');
+        zoomTo(scene1, 1.18, 50, 52);
+        await wait(1800);
+
+        // User replies
+        addMsg(s1Chat, 'About 5 users are affected. The printer shows no lights at all. It\'s connected via network cable.', 'right');
+        await wait(1200);
+
+        // AI typing indicator → resolution
+        typing = addTypingIndicator(s1Chat);
+        zoomTo(scene1, 1.22, 50, 55);
+        await wait(1400);
+        typing.remove();
+        addMsg(s1Chat, 'Based on your description, this appears to be a <strong>power supply issue</strong>. Here\'s the troubleshooting plan:<br><br>1. Check power outlet and cable connections<br>2. Try a different power outlet<br>3. Perform a hard reset (hold power 15 sec)<br>4. If no response, escalate to on-site tech<br><br>Creating ticket now...', 'left');
+        await wait(2200);
+
+        // === SCENE 2: Agent Triage ===
+        showScene(2);
+
+        // Start wide so "Printer offline" header is fully visible
+        zoomTo(scene2, 1, 30, 42);
+        await wait(800);
+
+        // Quick zoom into ticket detail — lock onto one spot
+        zoomTo(scene2, 1.4, 14, 42);
+        await wait(600);
+
+        // Fill in ticket fields — camera stays locked
+        const fields = document.querySelectorAll('.s2-field');
+        for (let i = 0; i < fields.length; i++) {
+          revealField(fields[i]);
+          await wait(300);
+        }
+        await wait(300);
+
+        // Show resolution — stay in same area
+        revealField(s2Res);
+        await wait(1400);
+
+        // Quick pan to agent log — lock onto that spot
+        zoomTo(scene2, 1.4, 62, 35);
+        await wait(800);
+
+        // Agents stagger in — camera stays locked
+        const agents = s2Agents.querySelectorAll('.agent-entry');
+
+        for (let i = 0; i < agents.length; i++) {
+          agents[i].classList.add('visible');
+          await wait(600);
+        }
+        await wait(1500);
+
+        // Pull back to show full picture
+        zoomTo(scene2, 1, 50, 50);
+        await wait(3000);
+
+        // Loop
+        runDemo();
+      }
+
+      setTimeout(runDemo, 1500);
+
+      // === SCROLL REVEAL ANIMATIONS ===
+      const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur');
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => revealObserver.observe(el));
+
+      // === VALUE PROP AUTO-CYCLING HIGHLIGHT ===
+      const vpSection = document.getElementById('valuePropSection');
+      const hlWords = vpSection.querySelectorAll('.highlight-text[data-step]');
+      const agentCards = vpSection.querySelectorAll('.agent-card-wrap[data-card-step]');
+      let vpInterval = null;
+      let vpStep = 0;
+
+      let vpTimeouts = [];
+      function vpClear() { vpTimeouts.forEach(t => clearTimeout(t)); vpTimeouts = []; }
+      function vpDelay(fn, ms) { vpTimeouts.push(setTimeout(fn, ms)); }
+
+      function resetCardContent(cardId) {
+        const card = document.getElementById(cardId);
+        if (!card) return;
+        card.querySelectorAll('.card-el').forEach(el => { el.classList.remove('el-show', 'resolve-glow'); el.classList.add('el-hidden'); });
+        card.querySelectorAll('.type-text').forEach(el => { el.classList.remove('typing'); el.style.width = '0'; });
+        card.querySelectorAll('.card-cursor').forEach(c => { c.classList.remove('cursor-show'); c.style.left = '20px'; c.style.top = '20px'; });
+        card.querySelectorAll('.scan-line').forEach(s => s.classList.remove('scanning'));
+      }
+
+      function resetAllCards() {
+        // Remove all state classes from cards
+        agentCards.forEach(c => c.classList.remove('card-active', 'card-dim', 'card-hero'));
+        // Reset cursors and scan lines
+        document.querySelectorAll('.card-cursor').forEach(c => { c.classList.remove('cursor-show'); c.style.left = '20px'; c.style.top = '20px'; });
+        document.querySelectorAll('.scan-line').forEach(s => s.classList.remove('scanning'));
+        // Reset triage specifics
+        const bar = document.getElementById('triageBar');
+        if (bar) bar.style.width = '0';
+        const pct = document.getElementById('triagePct');
+        if (pct) pct.textContent = '0%';
+        // Reset dispatch specifics
+        const t1 = document.getElementById('dispTech1');
+        if (t1) { t1.style.background = ''; t1.style.borderColor = ''; }
+        const m1 = document.getElementById('dispMatch1');
+        if (m1) { m1.textContent = '2 in queue'; m1.style.color = ''; }
+        // Show all card-el by default (so dimmed cards still show content)
+        document.querySelectorAll('.card-el').forEach(el => { el.classList.remove('el-hidden', 'el-show', 'resolve-glow'); });
+        document.querySelectorAll('.type-text').forEach(el => { el.classList.remove('typing'); el.style.width = ''; });
+      }
+
+      function moveCursorTo(cursor, x, y) {
+        cursor.style.left = x + 'px';
+        cursor.style.top = y + 'px';
+      }
+
+      function animateTriage() {
+        resetCardContent('cardTriage');
+        const cursor = document.getElementById('cursorTriage');
+        const scan = document.getElementById('triageScan');
+        // Cursor enters
+        vpDelay(() => { cursor.classList.add('cursor-show'); moveCursorTo(cursor, 30, 60); }, 100);
+        // Cursor moves to ticket
+        vpDelay(() => moveCursorTo(cursor, 80, 75), 300);
+        // Ticket appears
+        vpDelay(() => document.getElementById('triageTicket').classList.add('el-show'), 400);
+        // Scan line sweeps
+        vpDelay(() => { scan.classList.add('scanning'); moveCursorTo(cursor, 150, 95); }, 700);
+        // Tags appear one by one
+        vpDelay(() => document.getElementById('triageTag1').classList.add('el-show'), 1000);
+        vpDelay(() => { document.getElementById('triageArrow1').classList.add('el-show'); moveCursorTo(cursor, 170, 115); }, 1200);
+        vpDelay(() => document.getElementById('triageTag2').classList.add('el-show'), 1350);
+        vpDelay(() => document.getElementById('triageArrow2').classList.add('el-show'), 1500);
+        vpDelay(() => document.getElementById('triageTag3').classList.add('el-show'), 1650);
+        // Priority + Confidence
+        vpDelay(() => { document.getElementById('triagePri').classList.add('el-show'); moveCursorTo(cursor, 60, 170); }, 1900);
+        vpDelay(() => document.getElementById('triageConf').classList.add('el-show'), 2100);
+        // Confidence bar fills
+        vpDelay(() => {
+          document.getElementById('triageBar').style.width = '94%';
+          moveCursorTo(cursor, 220, 180);
+          let count = 0;
+          const pct = document.getElementById('triagePct');
+          const ci = setInterval(() => { count += 4; if (count > 94) count = 94; pct.textContent = count + '%'; if (count >= 94) clearInterval(ci); }, 40);
+        }, 2300);
+        vpDelay(() => cursor.classList.remove('cursor-show'), 2800);
+      }
+
+      function animateDispatch() {
+        resetCardContent('cardDispatch');
+        const cursor = document.getElementById('cursorDispatch');
+        vpDelay(() => { cursor.classList.add('cursor-show'); moveCursorTo(cursor, 30, 55); }, 100);
+        // Techs appear
+        vpDelay(() => { document.getElementById('dispTech1').classList.add('el-show'); moveCursorTo(cursor, 180, 65); }, 300);
+        vpDelay(() => document.getElementById('dispTech2').classList.add('el-show'), 600);
+        vpDelay(() => { document.getElementById('dispTech3').classList.add('el-show'); moveCursorTo(cursor, 180, 130); }, 900);
+        // Cursor scans back up to tech 1
+        vpDelay(() => moveCursorTo(cursor, 200, 65), 1200);
+        // Highlight tech 1 as best match
+        vpDelay(() => {
+          const t1 = document.getElementById('dispTech1');
+          t1.style.background = 'rgba(245,158,11,0.08)';
+          t1.style.borderColor = 'rgba(245,158,11,0.3)';
+          const m1 = document.getElementById('dispMatch1');
+          m1.textContent = '98% match';
+          m1.style.color = '#b45309';
+        }, 1500);
+        // Assigned banner
+        vpDelay(() => { document.getElementById('dispAssigned').classList.add('el-show'); moveCursorTo(cursor, 150, 185); }, 1900);
+        vpDelay(() => cursor.classList.remove('cursor-show'), 2500);
+      }
+
+      function animateSelfService() {
+        resetCardContent('cardSelfService');
+        const cursor = document.getElementById('cursorSS');
+        vpDelay(() => { cursor.classList.add('cursor-show'); moveCursorTo(cursor, 50, 55); }, 100);
+        // AI message 1
+        vpDelay(() => {
+          document.getElementById('ssMsg1').classList.add('el-show');
+          moveCursorTo(cursor, 130, 70);
+        }, 300);
+        vpDelay(() => document.getElementById('ssText1').classList.add('typing'), 500);
+        // User reply 1
+        vpDelay(() => {
+          document.getElementById('ssMsg2').classList.add('el-show');
+          moveCursorTo(cursor, 200, 95);
+        }, 1200);
+        vpDelay(() => document.getElementById('ssText2').classList.add('typing'), 1350);
+        // AI message 2
+        vpDelay(() => {
+          document.getElementById('ssMsg3').classList.add('el-show');
+          moveCursorTo(cursor, 120, 120);
+        }, 1800);
+        vpDelay(() => document.getElementById('ssText3').classList.add('typing'), 1950);
+        // User reply 2
+        vpDelay(() => {
+          document.getElementById('ssMsg4').classList.add('el-show');
+          moveCursorTo(cursor, 180, 145);
+        }, 2300);
+        vpDelay(() => document.getElementById('ssText4').classList.add('typing'), 2450);
+        // Done badge
+        vpDelay(() => { document.getElementById('ssDone').classList.add('el-show'); moveCursorTo(cursor, 140, 175); }, 2700);
+        vpDelay(() => cursor.classList.remove('cursor-show'), 2900);
+      }
+
+      function animateResolution() {
+        resetCardContent('cardResolution');
+        const cursor = document.getElementById('cursorRes');
+        vpDelay(() => { cursor.classList.add('cursor-show'); moveCursorTo(cursor, 80, 60); }, 100);
+        // Search bar appears + typing
+        vpDelay(() => document.getElementById('resSearch').classList.add('el-show'), 200);
+        vpDelay(() => { document.getElementById('resSearchText').classList.add('typing'); moveCursorTo(cursor, 180, 60); }, 400);
+        // KB results slide in
+        vpDelay(() => { document.getElementById('resKB1').classList.add('el-show'); moveCursorTo(cursor, 160, 100); }, 1100);
+        vpDelay(() => document.getElementById('resKB2').classList.add('el-show'), 1400);
+        vpDelay(() => { document.getElementById('resKB3').classList.add('el-show'); moveCursorTo(cursor, 160, 135); }, 1700);
+        // Cursor clicks top result
+        vpDelay(() => moveCursorTo(cursor, 160, 100), 2000);
+        // Auto-resolved banner with glow
+        vpDelay(() => {
+          const res = document.getElementById('resResolved');
+          res.classList.add('el-show', 'resolve-glow');
+          moveCursorTo(cursor, 130, 180);
+        }, 2300);
+        vpDelay(() => cursor.classList.remove('cursor-show'), 2800);
+      }
+
+      const cardRes = document.getElementById('cardResolution');
+
+      function setVpStep(step) {
+        vpClear();
+        resetAllCards();
+        vpStep = step;
+        hlWords.forEach(w => {
+          const s = parseInt(w.dataset.step);
+          w.classList.remove('hl-active', 'hl-dim');
+          if (s === step) w.classList.add('hl-active');
+          else w.classList.add('hl-dim');
+        });
+        if (step === 1) {
+          agentCards.forEach(c => {
+            const s = parseInt(c.dataset.cardStep);
+            c.classList.add(s === 1 ? 'card-active' : 'card-dim');
+          });
+          animateTriage();
+        } else if (step === 2) {
+          agentCards.forEach(c => {
+            const s = parseInt(c.dataset.cardStep);
+            c.classList.add(s === 2 ? 'card-active' : 'card-dim');
+          });
+          animateDispatch();
+        } else if (step === 3) {
+          // Self-Service active first, Resolution still dimmed
+          agentCards.forEach(c => {
+            const s = parseInt(c.dataset.cardStep);
+            if (c.id === 'cardSelfService') c.classList.add('card-active');
+            else if (c.id === 'cardResolution') c.classList.add('card-dim');
+            else c.classList.add('card-dim');
+          });
+          animateSelfService();
+          // After Self-Service finishes, light up Resolution with hero emphasis
+          vpDelay(() => {
+            const ssCard = document.getElementById('cardSelfService');
+            ssCard.classList.remove('card-active');
+            ssCard.classList.add('card-dim');
+            cardRes.classList.remove('card-dim');
+            cardRes.classList.add('card-active', 'card-hero');
+            animateResolution();
+          }, 3200);
+        }
+      }
+
+      const vpObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !vpInterval) {
+            setVpStep(1);
+            vpInterval = setInterval(() => {
+              const next = vpStep >= 3 ? 1 : vpStep + 1;
+              setVpStep(next);
+            }, 6000);
+          } else if (!entry.isIntersecting && vpInterval) {
+            clearInterval(vpInterval);
+            vpInterval = null;
+            hlWords.forEach(w => w.classList.remove('hl-active', 'hl-dim'));
+            agentCards.forEach(c => c.classList.remove('card-active', 'card-dim', 'card-hero'));
+          }
+        });
+      }, { threshold: 0.2 });
+      vpObserver.observe(vpSection);
+
+      // === COUNTER ANIMATION ===
+      const statNums = document.querySelectorAll('.stat-num');
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target);
+            const suffix = el.dataset.suffix || '';
+            let current = 0;
+            const duration = 1200;
+            const step = target / (duration / 16);
+            const counter = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(counter);
+              }
+              el.textContent = Math.round(current) + suffix;
+            }, 16);
+            counterObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+      statNums.forEach(el => counterObserver.observe(el));
+
+      // === ARCHITECTURE DIAGRAM ANIMATION ===
+      const archDiagram = document.getElementById('archDiagram');
+      if (archDiagram) {
+        let archPlayed = false;
+        const archObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !archPlayed) {
+              archPlayed = true;
+              archObserver.unobserve(entry.target);
+              const allAnimated = archDiagram.querySelectorAll('.arch-node, .arch-connector, .arch-vline, .arch-layer');
+              allAnimated.forEach(el => {
+                const delay = parseInt(el.dataset.delay || '0');
+                setTimeout(() => el.classList.add('active'), delay);
+              });
+            }
+          });
+        }, { threshold: 0.3 });
+        archObserver.observe(archDiagram);
+      }
+
+    });
+  </script>
+
+  <!-- Pixel Canvas for Integration Cards -->
+  <script>
+  (function() {
+    function initPixelCanvas(card) {
+      const colors = JSON.parse(card.dataset.colors || '["#6366f1","#818cf8","#4338ca"]');
+      const gap = 5;
+      const baseSpeed = 0.03;
+      const canvas = document.createElement('canvas');
+      canvas.style.pointerEvents = 'none';
+      card.insertBefore(canvas, card.firstChild);
+      const ctx = canvas.getContext('2d');
+      let pixels = [];
+      let animId = 0;
+      let mode = 'disappear';
+
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+
+      function resize() {
+        const w = card.offsetWidth;
+        const h = card.offsetHeight;
+        canvas.width = w;
+        canvas.height = h;
+        pixels = [];
+        for (let x = 0; x < w; x += gap) {
+          for (let y = 0; y < h; y += gap) {
+            const dx = x - w / 2, dy = y - h / 2;
+            pixels.push({
+              x, y,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              speed: rand(0.1, 0.9) * baseSpeed,
+              size: 0,
+              sizeStep: Math.random() * 0.4,
+              minSize: 0.5,
+              maxSizeInt: 2,
+              maxSize: rand(0.5, 2),
+              delay: Math.sqrt(dx * dx + dy * dy),
+              counter: 0,
+              counterStep: Math.random() * 4 + (w + h) * 0.01,
+              isIdle: true,
+              isReverse: false,
+              isShimmer: false
+            });
+          }
+        }
+      }
+
+      function drawPixel(p) {
+        const offset = p.maxSizeInt * 0.5 - p.size * 0.5;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x + offset, p.y + offset, p.size, p.size);
+      }
+
+      function appear(p) {
+        p.isIdle = false;
+        if (p.counter <= p.delay) { p.counter += p.counterStep; return; }
+        if (p.size >= p.maxSize) p.isShimmer = true;
+        if (p.isShimmer) {
+          if (p.size >= p.maxSize) p.isReverse = true;
+          else if (p.size <= p.minSize) p.isReverse = false;
+          p.size += p.isReverse ? -p.speed : p.speed;
+        } else {
+          p.size += p.sizeStep;
+        }
+        drawPixel(p);
+      }
+
+      function disappear(p) {
+        p.isShimmer = false;
+        p.counter = 0;
+        if (p.size <= 0) { p.isIdle = true; return; }
+        p.size -= 0.1;
+        drawPixel(p);
+      }
+
+      function loop() {
+        animId = requestAnimationFrame(loop);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let allIdle = true;
+        for (const p of pixels) {
+          if (mode === 'appear') { appear(p); allIdle = false; }
+          else { disappear(p); if (!p.isIdle) allIdle = false; }
+        }
+        if (allIdle && mode === 'disappear') cancelAnimationFrame(animId);
+      }
+
+      function startAnim(m) {
+        mode = m;
+        cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(loop);
+      }
+
+      resize();
+      const ro = new ResizeObserver(() => resize());
+      ro.observe(card);
+      card.addEventListener('mouseenter', () => startAnim('appear'));
+      card.addEventListener('mouseleave', () => startAnim('disappear'));
+    }
+
+    const integSection = document.getElementById('mspIntegrations');
+    if (integSection) {
+      let pixelInited = false;
+      const pixelObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !pixelInited) {
+          pixelInited = true;
+          pixelObserver.disconnect();
+          document.querySelectorAll('.integ-cell[data-colors]').forEach(initPixelCanvas);
+        }
+      }, { rootMargin: '200px' });
+      pixelObserver.observe(integSection);
+    }
+  })();
+  </script>
+</body>
+</html>
